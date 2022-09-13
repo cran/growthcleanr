@@ -1,7 +1,7 @@
 Package: growthcleanr
 Type: Package
 Title: Data Cleaner for Anthropometric Measurements
-Version: 2.0.1
+Version: 2.0.2
 Authors@R: c(
     person("Daymont","Carrie", email = "cdaymont@pennstatehealth.psu.edu", role = "aut"),
     person("Grundmeier","Robert", role = "aut"),
@@ -35,7 +35,7 @@ Suggests: argparser (>= 0.6), bit64 (>= 4.0.2), knitr (>= 1.29),
         rmarkdown (>= 2.3), testthat (>= 2.3.2)
 RoxygenNote: 7.2.1
 NeedsCompilation: no
-Packaged: 2022-08-31 18:20:49 UTC; HDELOSSANTOS
+Packaged: 2022-09-13 15:17:53 UTC; dlchudnov
 Author: Daymont Carrie [aut],
   Grundmeier Robert [aut],
   Miller Jeffrey [aut],
@@ -53,4 +53,4 @@ Author: Daymont Carrie [aut],
   Soleymani Taraneh [ctb]
 Maintainer: De los Santos Hannah <hdelossantos@mitre.org>
 Repository: CRAN
-Date/Publication: 2022-09-01 15:00:02 UTC
+Date/Publication: 2022-09-13 16:10:06 UTC
