@@ -1,3 +1,17 @@
+# growthcleanr 2.1.0 - 2023-02-03
+
+## Added
+
+- Use dependabot to update GitHub workflow action versions (#94)
+- Use GitHub action to build and publish container image (#101)
+
+## Changed
+
+- Updated `ext_bmiz()` to match Dec 2022 NCHS guidelines (#98)
+- New options to keep dates, columns, unmatched rows in `longwide()` (#71)
+- Updated CITATION to match new CRAN requirements
+- Updated Dockerfile to build from repo, not CRAN
+
 # growthcleanr 2.0.3 - 2022-11-01
 
 ## Added
