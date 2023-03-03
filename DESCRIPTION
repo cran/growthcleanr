@@ -1,24 +1,24 @@
 Package: growthcleanr
 Type: Package
 Title: Data Cleaner for Anthropometric Measurements
-Version: 2.1.0
+Version: 2.1.1
 Authors@R: c(
-    person("Daymont","Carrie", email = "cdaymont@pennstatehealth.psu.edu", role = c("ctb","cre")),
-    person("Grundmeier","Robert", role = "aut"),
-    person("Miller","Jeffrey", role = "aut"),
-    person("Campos","Diego", role = "aut"),
-    person("Chudnov","Dan", role = "ctb"),
-    person("De los Santos","Hannah", email = "hdelossantos@mitre.org", role = c("ctb")),
-    person("Cao","Lusha", role = "ctb"),
-    person("Silva","Steffani", role = "ctb"),
-    person("Zhang","Hanzhe", role = "ctb"),
-    person("Boyas","Matt", role = "ctb"),
-    person("Freedman","David", role = "ctb"),
-    person("Achilleos","Andreas", role = "ctb"),
-    person("Butts","Jessica", role = "ctb"),
-    person("Nguyen","Sheila", role = "ctb"),
-    person("Soleymani","Taraneh", role = "ctb"),
-    person("Olivier","Max", role = "ctb")
+    person("Carrie", "Daymont", email = "cdaymont@pennstatehealth.psu.edu", role = c("ctb","cre")),
+    person("Robert", "Grundmeier", role = "aut"),
+    person("Jeffrey", "Miller", role = "aut"),
+    person("Diego", "Campos", role = "aut"),
+    person("Dan", "Chudnov", email = "dlchudnov@mitre.org", role = "ctb"),
+    person("Hannah", "De los Santos", email = "hdelossantos@mitre.org", role = c("ctb")),
+    person("Lusha", "Cao", role = "ctb"),
+    person("Steffani", "Silva", role = "ctb"),
+    person("Hanzhe", "Zhang", role = "ctb"),
+    person("Matt", "Boyas", role = "ctb"),
+    person("David", "Freedman", role = "ctb"),
+    person("Andreas", "Achilleos", role = "ctb"),
+    person("Jessica", "Butts", role = "ctb"),
+    person("Sheila", "Nguyen", role = "ctb"),
+    person("Taraneh", "Soleymani", role = "ctb"),
+    person("Max", "Olivier", role = "ctb")
   )
 Description: Identifies implausible anthropometric (e.g., height,
     weight) measurements in irregularly spaced longitudinal datasets, such as those from electronic health records.
@@ -36,23 +36,23 @@ Suggests: argparser (>= 0.6), bit64 (>= 4.0.2), knitr (>= 1.29),
         rmarkdown (>= 2.3), testthat (>= 2.3.2)
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2023-02-16 20:01:21 UTC; HDELOSSANTOS
-Author: Daymont Carrie [ctb, cre],
-  Grundmeier Robert [aut],
-  Miller Jeffrey [aut],
-  Campos Diego [aut],
-  Chudnov Dan [ctb],
-  De los Santos Hannah [ctb],
-  Cao Lusha [ctb],
-  Silva Steffani [ctb],
-  Zhang Hanzhe [ctb],
-  Boyas Matt [ctb],
-  Freedman David [ctb],
-  Achilleos Andreas [ctb],
-  Butts Jessica [ctb],
-  Nguyen Sheila [ctb],
-  Soleymani Taraneh [ctb],
-  Olivier Max [ctb]
-Maintainer: Daymont Carrie <cdaymont@pennstatehealth.psu.edu>
+Packaged: 2023-03-02 13:41:09 UTC; HDELOSSANTOS
+Author: Carrie Daymont [ctb, cre],
+  Robert Grundmeier [aut],
+  Jeffrey Miller [aut],
+  Diego Campos [aut],
+  Dan Chudnov [ctb],
+  Hannah De los Santos [ctb],
+  Lusha Cao [ctb],
+  Steffani Silva [ctb],
+  Hanzhe Zhang [ctb],
+  Matt Boyas [ctb],
+  David Freedman [ctb],
+  Andreas Achilleos [ctb],
+  Jessica Butts [ctb],
+  Sheila Nguyen [ctb],
+  Taraneh Soleymani [ctb],
+  Max Olivier [ctb]
+Maintainer: Carrie Daymont <cdaymont@pennstatehealth.psu.edu>
 Repository: CRAN
-Date/Publication: 2023-02-16 23:10:05 UTC
+Date/Publication: 2023-03-03 10:20:02 UTC

@@ -1,14 +1,14 @@
-e0c808542df54af96df06c509a8c3556 *DESCRIPTION
+ce4596659f90cc2f52107365b824168e *DESCRIPTION
 266bd8a21d2438863c556f52328fa3f3 *LICENSE
 b4fcb7d5665cdad8662c09b7b2f375d2 *NAMESPACE
-df85234d07dd9f057933ceb6f0c5af72 *NEWS.md
+72ed434629088ed67263ee6226cdd789 *NEWS.md
 0f2a4e777a942ddd4ef26e6416aafe4f *R/adjustcarryforward.R
 0b7d0cf47484870df3adedd703f067ca *R/adult_clean.R
 4acf08a353a274af0423ad68bbb3c6d6 *R/adult_support.R
 62339762afd6f3cfbd72527c302c7e5b *R/cdc.R
 256dd46cb5838690f5d78764e1b37aad *R/data.R
 2bc7bf130fa39acc8e4338972d68f0cb *R/extdata.R
-3d1be275d5d0d801d02f68689cccd192 *R/growth.R
+b1df107800aa4b64a93881311e666cae *R/growth.R
 07ea24eb510b3272033ab6829becfc3a *R/pediatric_clean.R
 ca524627a7eee6061cac49366af667f1 *R/pediatric_support.R
 37a720855fdb2366e0e7fccd1b206106 *R/testacf_func.R
@@ -61,5 +61,5 @@ ea5fba90970c18d46d48607ca85254e1 *man/who_ht_maxvel_2sd.Rd
 7e8ab9babb64ab07bc18b1343168c6af *man/who_ht_vel_3sd.Rd
 097bb3ad1ad89c0d912d651d006b42af *tests/testthat.R
 c6dbc8238af40abb742a11d5f8c485de *tests/testthat/test-cdc.R
-f497b15d932924acd3632e003cb27c14 *tests/testthat/test-cleangrowth.R
+f2fb329479bc9a7de17fb451861871f8 *tests/testthat/test-cleangrowth.R
 299750a3fbc2fc2aff1c7025bcccbe5b *tests/testthat/test-utils.R
