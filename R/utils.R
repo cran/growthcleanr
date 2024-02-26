@@ -176,9 +176,10 @@ recode_sex <- function(input_data,
 #' @rawNamespace import(tidyr, except = extract)
 #' @rawNamespace import(dplyr, except = c(last, first, summarize, src, between))
 #' @examples
+#' \donttest{
 #' # Run on a small subset of given data
 #' df <- as.data.frame(syngrowth)
-#' df <- df[df$subjid %in% unique(df[, "subjid"])[1:5], ]
+#' df <- df[df$subjid %in% unique(df[, "subjid"])[1:2], ]
 #' df <- cbind(df,
 #'             "gcr_result" = cleangrowth(df$subjid,
 #'                                        df$param,
@@ -193,6 +194,7 @@ recode_sex <- function(input_data,
 #'
 #' # Specify all inclusion codes
 #' wide_df <- longwide(df, inclusion_types = c("Include", "Exclude-Carried-Forward"))
+#' }
 longwide <-
   function(long_df,
            id = "id",
@@ -214,7 +216,7 @@ longwide <-
     if(all(c(id, subjid, sex, agedays, param, measurement, gcr_result,
              extra_cols) %in% colnames(long_df))) {
       long_df %>%
-        select(id, subjid, sex, agedays, param, measurement, gcr_result,
+        select(id, subjid, sex, agedays, param, measurement, all_of(gcr_result),
                all_of(extra_cols)) -> obs_df
     } else {
       # catch error if any variables were not found
@@ -329,10 +331,11 @@ longwide <-
 #' @import data.table
 #' @rawNamespace import(dplyr, except = c(last, first, summarize, src, between))
 #' @examples
+#' \donttest{
 #' # Simple usage
 #' # Run on a small subset of given data
 #' df <- as.data.frame(syngrowth)
-#' df <- df[df$subjid %in% unique(df[, "subjid"])[1:5], ]
+#' df <- df[df$subjid %in% unique(df[, "subjid"])[1:2], ]
 #' df <- cbind(df,
 #'             "gcr_result" = cleangrowth(df$subjid,
 #'                                        df$param,
@@ -347,6 +350,7 @@ longwide <-
 #' colnames(wide_df)[colnames(wide_df) %in% c("wt", "ht")] <-
 #'   c("weight", "height")
 #' wide_df_with_bmi <- simple_bmi(wide_df, wtcol = "weight", htcol = "height")
+#' }
 simple_bmi <- function(wide_df, wtcol = "wt", htcol = "ht") {
   # Verify the specified columns are present
   if (!all(c(wtcol, htcol) %in% colnames(wide_df))) {

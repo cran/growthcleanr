@@ -22,10 +22,11 @@ Returns a data table with the added column "bmi"
 output from longwide().
 }
 \examples{
+\donttest{
 # Simple usage
 # Run on a small subset of given data
 df <- as.data.frame(syngrowth)
-df <- df[df$subjid \%in\% unique(df[, "subjid"])[1:5], ]
+df <- df[df$subjid \%in\% unique(df[, "subjid"])[1:2], ]
 df <- cbind(df,
             "gcr_result" = cleangrowth(df$subjid,
                                        df$param,
@@ -40,4 +41,5 @@ wide_df_with_bmi <- simple_bmi(wide_df)
 colnames(wide_df)[colnames(wide_df) \%in\% c("wt", "ht")] <-
   c("weight", "height")
 wide_df_with_bmi <- simple_bmi(wide_df, wtcol = "weight", htcol = "height")
+}
 }

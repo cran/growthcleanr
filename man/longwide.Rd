@@ -70,9 +70,10 @@ transforming output from growthcleanr::cleangrowth() into a format suitable
 for growthcleanr::ext_bmiz().
 }
 \examples{
+\donttest{
 # Run on a small subset of given data
 df <- as.data.frame(syngrowth)
-df <- df[df$subjid \%in\% unique(df[, "subjid"])[1:5], ]
+df <- df[df$subjid \%in\% unique(df[, "subjid"])[1:2], ]
 df <- cbind(df,
             "gcr_result" = cleangrowth(df$subjid,
                                        df$param,
@@ -87,4 +88,5 @@ wide_df <- longwide(df, include_all = TRUE)
 
 # Specify all inclusion codes
 wide_df <- longwide(df, inclusion_types = c("Include", "Exclude-Carried-Forward"))
+}
 }
