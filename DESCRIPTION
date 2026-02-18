@@ -1,7 +1,7 @@
 Package: growthcleanr
 Type: Package
 Title: Data Cleaner for Anthropometric Measurements
-Version: 2.2.0
+Version: 2.2.1
 Authors@R: c(
     person("Carrie", "Daymont", email = "cdaymont@pennstatehealth.psu.edu", role = c("ctb","cre")),
     person("Robert", "Grundmeier", role = "aut"),
@@ -27,16 +27,17 @@ URL: https://carriedaymont.github.io/growthcleanr/index.html,
 BugReports: https://github.com/carriedaymont/growthcleanr/issues
 Imports: R.utils (>= 2.11.0), data.table (>= 1.13.0), tidyr (>= 1.1.0),
         plyr (>= 1.8.6), dplyr (>= 1.0.1), foreach (>= 1.5.0),
-        doParallel (>= 1.0.15), labelled (>= 2.5.0), magrittr (>= 1.5)
+        doParallel (>= 1.0.15), labelled (>= 2.5.0), magrittr (>= 1.5),
+        rlang (>= 0.4.0)
 Depends: R (>= 2.10)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: argparser (>= 0.6), bit64 (>= 4.0.2), knitr (>= 1.29),
         rmarkdown (>= 2.3), testthat (>= 2.3.2)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 NeedsCompilation: no
-Packaged: 2024-02-22 21:16:30 UTC; HDELOSSANTOS
+Packaged: 2026-02-18 19:27:37 UTC; carriedaymont
 Author: Carrie Daymont [ctb, cre],
   Robert Grundmeier [aut],
   Jeffrey Miller [aut],
@@ -55,4 +56,4 @@ Author: Carrie Daymont [ctb, cre],
   Max Olivier [ctb]
 Maintainer: Carrie Daymont <cdaymont@pennstatehealth.psu.edu>
 Repository: CRAN
-Date/Publication: 2024-02-26 19:30:02 UTC
+Date/Publication: 2026-02-18 20:00:07 UTC

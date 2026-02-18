@@ -44,7 +44,7 @@ set_cols_first <- function(DT, cols, intersection = TRUE)
 #' differ only for children who have a BMI > 95th percentile.
 #'
 #' This function should produce output equivalent to the SAS macro provided at
-#' https://www.cdc.gov/nccdphp/dnpao/growthcharts/resources/sas.htm. The macro
+#' https://www.cdc.gov/growth-chart-training/hcp/computer-programs/sas.html. The macro
 #' was updated in December, 2022, according to the findings of the NCHS
 #' report available at https://dx.doi.org/10.15620/cdc:121711. This function has
 #' been updated to match it as of growthcleanr v2.1.0.
@@ -84,7 +84,7 @@ set_cols_first <- function(DT, cols, intersection = TRUE)
 #' \code{FALSE} to disable.
 #'
 #' By default, the reference data file \code{CDCref_d.csv}, made available at
-#' https://www.cdc.gov/nccdphp/dnpao/growthcharts/resources/sas.htm, is included
+#' https://www.cdc.gov/growth-chart-training/hcp/computer-programs/sas.html, is included
 #' in this package for convenience. If you are developing this package, use
 #' \code{ref.data.path} to adjust the path to this file from your working
 #' directory if necessary.
@@ -261,27 +261,27 @@ ext_bmiz <- function (data,
 
   dt <- mutate(
     dt,
-    bp = 100 * pnorm(bz),
-    p95 = m * (1 + l * s * qnorm(0.95)) ^ (1 / l),
-    p97 = m * (1 + l * s * qnorm(0.97)) ^ (1 / l),
-    bmip95 = 100 * (bmi / p95),
-    wp = 100 * pnorm(waz),
-    hp = 100 * pnorm(haz),
+    bp = 100 * pnorm(.data$bz),
+    p95 = .data$m * (1 + .data$l * .data$s * qnorm(0.95)) ^ (1 / .data$l),
+    p97 = .data$m * (1 + .data$l * .data$s * qnorm(0.97)) ^ (1 / .data$l),
+    bmip95 = 100 * (.data$bmi / .data$p95),
+    wp = 100 * pnorm(.data$waz),
+    hp = 100 * pnorm(.data$haz),
 
     # other BMI metrics -- PMID 31439056
-    z1 = ((bmi / m) - 1) / s,
+    z1 = ((.data$bmi / .data$m) - 1) / .data$s,
     # LMS formula when L=1: ((BMI/M)-1)/S
-    dist1 = z1 * m * s,
+    dist1 = .data$z1 * .data$m * .data$s,
     # unadjusted distance from median
-    adist1 = z1 * sref * mref,
+    adist1 = .data$z1 * .data$sref * .data$mref,
     # Adjusted (to age 20y) dist from median
-    perc1 = z1 * 100 * s,
+    perc1 = .data$z1 * 100 * .data$s,
     # unadjusted %distance from median
-    aperc1 = z1 * 100 * sref,
+    aperc1 = .data$z1 * 100 * .data$sref,
     # adj %distance from median
 
-    obese = 1L * (bmi >= p95),
-    sev_obese = 1L * (bmip95 >= 120)
+    obese = 1L * (.data$bmi >= .data$p95),
+    sev_obese = 1L * (.data$bmip95 >= 120)
   ) %>% setDT()
 
   # now create Extended z-score for BMI >=95th P
