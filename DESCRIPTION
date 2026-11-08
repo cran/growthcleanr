@@ -1,59 +1,112 @@
 Package: growthcleanr
-Type: Package
 Title: Data Cleaner for Anthropometric Measurements
-Version: 2.2.3
+Version: 3.0.0
 Authors@R: c(
-    person("Carrie", "Daymont", email = "cdaymont@pennstatehealth.psu.edu", role = c("ctb","cre")),
-    person("Robert", "Grundmeier", role = "aut"),
+    person("Carrie", "Daymont", email = "cdaymont@pennstatehealth.psu.edu", role = c("cre", "aut", "cph")),
+    person("Robert W", "Grundmeier", role = "aut"),
     person("Jeffrey", "Miller", role = "aut"),
     person("Diego", "Campos", role = "aut"),
-    person("Dan", "Chudnov", email = "dlchudnov@mitre.org", role = "ctb"),
-    person("Hannah", "De los Santos", email = "hdelossantos@mitre.org", role = c("ctb")),
-    person("Lusha", "Cao", role = "ctb"),
-    person("Steffani", "Silva", role = "ctb"),
-    person("Hanzhe", "Zhang", role = "ctb"),
+    person("Dan", "Chudnov", role = "aut"),
+    person("Hannah", "De los Santos", role = "aut"),
+    person("David", "Freedman", role = "aut"),
+    person("Wen", "Hu", role = "aut"),
+    person("Chris", "Penney", role = "aut"),
+    person("Jesse", "Anderson", role = "ctb"),
     person("Matt", "Boyas", role = "ctb"),
-    person("David", "Freedman", role = "ctb"),
-    person("Andreas", "Achilleos", role = "ctb"),
-    person("Jessica", "Butts", role = "ctb"),
-    person("Sheila", "Nguyen", role = "ctb"),
-    person("Taraneh", "Soleymani", role = "ctb"),
-    person("Max", "Olivier", role = "ctb")
+    person("Lusha", "Cao", role = "ctb"),
+    person("Sara", "Couture", role = "ctb"),
+    person("Prashila", "Dullabh", role = "ctb"),
+    person("Jess", "Fernandez", role = "ctb"),
+    person("Andrew", "Gregorowicz", role = "ctb"),
+    person("Lyudmila", "Kompaniyets", role = "ctb"),
+    person("A Russell", "Localio", role = "ctb"),
+    person("Ruth", "Nwefo", role = "ctb"),
+    person("Max", "Olivier", role = "ctb"),
+    person("Samantha", "Pierce", role = "ctb"),
+    person("Michelle E", "Ross", role = "ctb"),
+    person("Steffani", "Silva", role = "ctb"),
+    person("Mithuna", "Srinivasan", role = "ctb"),
+    person("Marissa", "Sucosky", role = "ctb"),
+    person("Jennifer", "Wiltz", role = "ctb"),
+    person("Hanzhe", "Zhang", role = "ctb"),
+    person("Alexander G", "Fiks", role = "sad"),
+    person("Richard C (Mort)", "Wasserman", role = "sad"),
+    person("Andreas", "Achilleos", role = "sad"),
+    person("Nabeel", "Akhtar", role = "sad"),
+    person("Sarah", "Akhtar", role = "sad"),
+    person("Wilbert", "Beachy", role = "sad"),
+    person("Colin", "Bridgeman", role = "sad"),
+    person("Jessica", "Butts", role = "sad"),
+    person("Emily", "Despeaux", role = "sad"),
+    person("Christine", "Irvin", role = "sad"),
+    person("Madiha", "Jamil", role = "sad"),
+    person("Robert", "Marquis", role = "sad"),
+    person("Abigail", "Nelson", role = "sad"),
+    person("Sheila", "Nguyen", role = "sad"),
+    person("Taraneh", "Soleymani", role = "sad"),
+    person("Ronald", "Williams", role = "sad")
   )
-Description: Identifies implausible anthropometric (e.g., height,
-    weight) measurements in irregularly spaced longitudinal datasets, such as those from electronic health records.
-URL: https://carriedaymont.github.io/growthcleanr/index.html,
-        https://github.com/carriedaymont/growthcleanr
-BugReports: https://github.com/carriedaymont/growthcleanr/issues
-Imports: R.utils (>= 2.11.0), data.table (>= 1.13.0), tidyr (>= 1.1.0),
-        plyr (>= 1.8.6), dplyr (>= 1.0.1), foreach (>= 1.5.0),
-        doParallel (>= 1.0.15), labelled (>= 2.5.0), magrittr (>= 1.5),
-        rlang (>= 0.4.0)
-Depends: R (>= 2.10)
+Description: Flags implausible anthropometric (weight, height, and head circumference) measurements in longitudinal pediatric and adult datasets, such as those from electronic health records. Identifies other measurements that should often be excluded from analyses. The main function is cleangrowth(). Implements a modified version of the algorithm described in Daymont et al. (2017) <doi:10.1093/jamia/ocx037>.
+URL: https://growthcleanr.org/,
+        https://github.com/growth-data-tools/growthcleanr
+BugReports: https://github.com/growth-data-tools/growthcleanr/issues
+Imports: R.utils (>= 2.11.0), data.table (>= 1.13.0), foreach (>=
+        1.5.0), doParallel (>= 1.0.15), lubridate (>= 1.7.0), parallel,
+        stats, utils, shiny, DT, shinyjs, shinyFiles
+Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
+Language: en-US
 LazyData: true
-Suggests: argparser (>= 0.6), bit64 (>= 4.0.2), knitr (>= 1.29),
-        rmarkdown (>= 2.3), testthat (>= 2.3.2)
+Suggests: argparser (>= 0.6), knitr (>= 1.29), rmarkdown (>= 2.3),
+        testthat (>= 2.3.2)
+VignetteBuilder: knitr
 RoxygenNote: 7.3.3
 NeedsCompilation: no
-Packaged: 2026-05-09 14:44:19 UTC; carriedaymont
-Author: Carrie Daymont [ctb, cre],
-  Robert Grundmeier [aut],
+Packaged: 2026-11-08 14:43:49 UTC; carriedaymont
+Author: Carrie Daymont [cre, aut, cph],
+  Robert W Grundmeier [aut],
   Jeffrey Miller [aut],
   Diego Campos [aut],
-  Dan Chudnov [ctb],
-  Hannah De los Santos [ctb],
-  Lusha Cao [ctb],
-  Steffani Silva [ctb],
-  Hanzhe Zhang [ctb],
+  Dan Chudnov [aut],
+  Hannah De los Santos [aut],
+  David Freedman [aut],
+  Wen Hu [aut],
+  Chris Penney [aut],
+  Jesse Anderson [ctb],
   Matt Boyas [ctb],
-  David Freedman [ctb],
-  Andreas Achilleos [ctb],
-  Jessica Butts [ctb],
-  Sheila Nguyen [ctb],
-  Taraneh Soleymani [ctb],
-  Max Olivier [ctb]
+  Lusha Cao [ctb],
+  Sara Couture [ctb],
+  Prashila Dullabh [ctb],
+  Jess Fernandez [ctb],
+  Andrew Gregorowicz [ctb],
+  Lyudmila Kompaniyets [ctb],
+  A Russell Localio [ctb],
+  Ruth Nwefo [ctb],
+  Max Olivier [ctb],
+  Samantha Pierce [ctb],
+  Michelle E Ross [ctb],
+  Steffani Silva [ctb],
+  Mithuna Srinivasan [ctb],
+  Marissa Sucosky [ctb],
+  Jennifer Wiltz [ctb],
+  Hanzhe Zhang [ctb],
+  Alexander G Fiks [sad],
+  Richard C (Mort) Wasserman [sad],
+  Andreas Achilleos [sad],
+  Nabeel Akhtar [sad],
+  Sarah Akhtar [sad],
+  Wilbert Beachy [sad],
+  Colin Bridgeman [sad],
+  Jessica Butts [sad],
+  Emily Despeaux [sad],
+  Christine Irvin [sad],
+  Madiha Jamil [sad],
+  Robert Marquis [sad],
+  Abigail Nelson [sad],
+  Sheila Nguyen [sad],
+  Taraneh Soleymani [sad],
+  Ronald Williams [sad]
 Maintainer: Carrie Daymont <cdaymont@pennstatehealth.psu.edu>
 Repository: CRAN
-Date/Publication: 2026-05-09 15:20:02 UTC
+Date/Publication: 2026-11-08 21:20:10 UTC

@@ -8,19 +8,26 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/growthcleanr)](https://cran.r-project.org/package=growthcleanr)
 [![R build
-status](https://github.com/carriedaymont/growthcleanr/workflows/R-CMD-check/badge.svg)](https://github.com/carriedaymont/growthcleanr/actions)
-[![Docker](https://github.com/mitre/growthcleanr/actions/workflows/build-and-publish-image-tag.yml/badge.svg)](https://github.com/mitre/growthcleanr/actions/workflows/build-and-publish-image-tag.yml)
+status](https://github.com/growth-data-tools/growthcleanr/workflows/R-CMD-check/badge.svg)](https://github.com/growth-data-tools/growthcleanr/actions)
 
 <!-- badges: end -->
 
-R package for cleaning data from Electronic Health Record systems,
-focused on cleaning height and weight measurements.
+R package for cleaning pediatric and adult weight, height, and head
+circumference data from electronic health records.
 
-<a name="cite"></a> This package implements the [Daymont et
-al. algorithm](https://academic.oup.com/jamia/article/24/6/1080/3767271),
-as specified in Supplemental File 3 within the [Supplementary
-Material](https://academic.oup.com/jamia/article/24/6/1080/3767271#97610899)
-published with that paper.
+Version 3 is a major update. If you are new to growthcleanr, start with
+`vignette("new-start-here")`; if you have used growthcleanr before,
+start with `vignette("experienced-start-here")`. The full documentation
+is available at [growthcleanr.org](https://growthcleanr.org).
+
+<a name="cite"></a> This package implements a modified version of the
+[Daymont et
+al. algorithm](https://pmc.ncbi.nlm.nih.gov/articles/PMC7651915/), as
+specified in Supplemental File 3 within the [Supplementary
+Material](https://pmc.ncbi.nlm.nih.gov/articles/PMC7651915/) published
+with that paper. It includes significant updates that have yet to be
+published in a peer-reviewed journal, but are described in detail in the
+package documentation.
 
 > Carrie Daymont, Michelle E Ross, A Russell Localio, Alexander G Fiks,
 > Richard C Wasserman, Robert W Grundmeier, Automated identification of
@@ -29,90 +36,81 @@ published with that paper.
 > Volume 24, Issue 6, November 2017, Pages 1080–1087,
 > <https://doi.org/10.1093/jamia/ocx037>
 
-This package also includes an R version of the [SAS macro published by
-the
-CDC](https://www.cdc.gov/growth-chart-training/hcp/computer-programs/sas.html)
-for calculating percentiles and Z-scores of pediatric growth
-observations and utilities for working with both functions. As of summer
-2021, it also supports cleaning anthropometric measurements for adults
-up to age 65. The adult algorithm has not yet been published in a
-peer-reviewed publication, but is described in detail at [Adult
-algorithm](https://carriedaymont.github.io/growthcleanr/articles/adult-algorithm.html).
+This package also includes a function for calculating percentiles and
+Z-scores of pediatric growth observations using the methods in [CDC
+software](https://www.cdc.gov/growth-chart-training/hcp/computer-programs/index.html)
+and the [cdcanthro R
+package](https://CRAN.R-project.org/package=cdcanthro).
 
 ## Installation
 
-To install the stable version from CRAN:
+### From CRAN
+
+Install the current release from CRAN:
 
 ``` r
 install.packages("growthcleanr")
 ```
 
+### GitHub version
+
+To install the current version from GitHub with `remotes`, building the
+vignettes so the in-package documentation is available locally:
+
+``` r
+install.packages("remotes")
+remotes::install_github("growth-data-tools/growthcleanr",
+                        build_vignettes = TRUE, dependencies = TRUE)
+```
+
+`build_vignettes = TRUE` requires the `knitr` and `rmarkdown` packages,
+which `dependencies = TRUE` installs for you.
+(`pak::pak("growth-data-tools/growthcleanr")` also works and is faster,
+but does not build the vignettes.)
+
 ## Summary
 
-The `growthcleanr` package processes data prepared in a specific format
-to identify biologically implausible height and weight measurements. It
-bases these evaluations on techniques which use patient-specific
-longitudinal analysis and variations from published growth trajectory
-charts for pediatric subjects. These techniques are performed in a
-specific order which refines and improves results throughout the
-process.
+The `growthcleanr` package processes weight, height, and head
+circumference data to identify implausible measurements and other values
+that should be excluded from analysis. It uses a variety of techniques,
+many of which rely on a comparison of a value to an expected value
+derived from the patient’s other values.
 
 Results from `growthcleanr` include a flag for each measurement
-indicating whether it is to be included or excluded based on
-plausibility, with a variety of specific types of exclusions identified
-distinctly. These flags can be analyzed further by researchers studying
-anthropometric EHR data to determine which measurements to include or
-exclude in their own studies. No values are deleted or otherwise
-removed; each is only flagged in a new column.
+indicating a recommendation to include it or exclude it from analysis.
+No values are removed. These flags can be used as-is to identify an
+analytic dataset, but researchers can also examine detailed results to
+customize use of growthcleanr. The exclusion flags also facilitate
+reporting the reason for excluding a measurement.
 
-To start running `growthcleanr`, an R installation with a variety of
-additional packages is required, as is a growth measurement dataset
-prepared for use in `growthcleanr`.
+To start running `growthcleanr`, an R installation is required, as is a
+growth measurement dataset prepared for use in `growthcleanr`.
+growthcleanr can be run from R, from the command line, or through a
+point-and-click Shiny app (`growthcleanr_app()`) that doesn’t require
+writing R code.
 
-The rest of this documentation includes:
+## Documentation
 
-### Getting started:
-
-- [Quickstart](https://carriedaymont.github.io/growthcleanr/articles/quickstart.html),
-  a brief tour of using growthcleanr, including data preparation
-- [Installation](https://carriedaymont.github.io/growthcleanr/articles/installation.html),
-  options for installing growthcleanr, with notes on specific platforms
-  and source-level installation for developers
-- [Usage](https://carriedaymont.github.io/growthcleanr/articles/usage.html),
-  examples of cleaning data, multiple options, example data
-
-### Advanced topics:
-
-- [Configuration
-  options](https://carriedaymont.github.io/growthcleanr/articles/configuration.html),
-  changing growthcleanr operational settings
-- [Understanding growthcleanr
-  output](https://carriedaymont.github.io/growthcleanr/articles/output.html),
-  the exclusion types growthcleanr identifies
-- [Adult
-  algorithm](https://carriedaymont.github.io/growthcleanr/articles/adult-algorithm.html),
-  a detailed description of how growthcleanr assesses observations from
-  adult subjects
-- [Computing BMI percentiles and
-  Z-scores](https://carriedaymont.github.io/growthcleanr/articles/utilities.html),
-  additional functions for common data transforms and determining
-  percentiles and Z-scores using the CDC method
-- [Working with large
-  datasets](https://carriedaymont.github.io/growthcleanr/articles/large-data-sets.html),
-  notes and suggestions for running `growthcleanr` with large data
-  sources
-- [Next
-  steps](https://carriedaymont.github.io/growthcleanr/articles/next-steps.html),
-  notes on potential enhancements to the pediatric and adult algorithms
-- [Developer
-  guidelines](https://carriedaymont.github.io/growthcleanr/articles/developer-guidelines.html),
-  advice for contributors to this package, including a CRAN release
-  checklist
+The full documentation is available at
+[growthcleanr.org](https://growthcleanr.org): guides for getting
+started, configuration and output, and technical references for the
+child and adult algorithms. The vignettes also ship prebuilt with the
+package; view them locally with `browseVignettes("growthcleanr")`.
 
 ## Changes
 
-For a detailed history of released versions, see the
-[Changelog](https://carriedaymont.github.io/growthcleanr/news/index.html)
-or`NEWS.md`. Tagged releases, starting with 1.2.3 in January 2021, are
-listed [at
-GitHub](https://github.com/carriedaymont/growthcleanr/releases).
+Source code is on
+[GitHub](https://github.com/growth-data-tools/growthcleanr). For a
+summary of what changed relative to the last CRAN release, see [Start
+here for experienced
+users](https://growthcleanr.org/articles/experienced-start-here.html) or
+the [Changelog](https://growthcleanr.org/news/index.html) (also
+`NEWS.md`). Earlier tagged releases of growthcleanr are listed [at
+GitHub](https://github.com/growth-data-tools/growthcleanr/releases).
+
+## Contributors and funding
+
+The people and organizations who have contributed to and supported
+growthcleanr are listed on the
+[Contributors](https://growthcleanr.org/articles/contributors.html)
+page.

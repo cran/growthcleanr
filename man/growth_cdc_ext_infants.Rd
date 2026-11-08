@@ -2,12 +2,14 @@
 % Please edit documentation in R/extdata.R
 \name{growth_cdc_ext_infants}
 \alias{growth_cdc_ext_infants}
-\title{CDC Growth Percentile Table for Infants}
+\title{CDC Growth Reference Table}
 \description{
 Part of default CDC-derived tables
 }
 \details{
-Contains percentiles for various ages, gender, and weights, pre-calculated by CDC for infants algorithm
+Contains CDC LMS parameters and CSD values (median plus half the distance
+to +/-2 SD) for weight, height, head circumference, and BMI, by age in days
+and sex.
 }
 \section{growthfile_cdc_ext_infants.csv.gz}{
 

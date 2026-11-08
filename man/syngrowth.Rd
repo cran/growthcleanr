@@ -12,8 +12,8 @@ A data frame with six variables: \code{id}, \code{subjid},
 syngrowth
 }
 \description{
-A synthetic set of measurements from ~3,500
-subjects generated using Synthea, with measurement errors
+A synthetic set of 77,721 measurements from 2,697
+subjects generated using \href{https://synthea.org/}{Synthea}, with measurement errors
 for testing with growthcleanr. Contains both pediatric and adult data.
 }
 \details{

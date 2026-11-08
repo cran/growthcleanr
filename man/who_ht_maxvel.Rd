@@ -16,3 +16,8 @@ maximum height velocities.
 Used in function \code{cleangrowth()}
 }
 
+\references{
+World Health Organization. WHO Child Growth Standards: Growth
+velocity based on weight, length and head circumference: Methods and
+development. Geneva: World Health Organization; 2009. ISBN 9789241547635.
+}

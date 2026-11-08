@@ -4,10 +4,10 @@
 \alias{tanner_ht_vel}
 \title{Tanner Growth Velocity Table}
 \description{
-Part of default CDC-derived tables
+Part of default reference tables
 }
 \details{
-Contains velocities for growth pre-calculated by CDC
+Contains height velocities from Tanner and Davies (1985)
 }
 \section{tanner_ht_vel.csv.gz}{
 
@@ -15,3 +15,8 @@ Contains velocities for growth pre-calculated by CDC
 Used in function \code{cleangrowth()}
 }
 
+\references{
+Tanner JM, Davies PS. Clinical longitudinal standards for
+height and height velocity for North American children. J Pediatr. 1985
+Sep;107(3):317-329. \doi{10.1016/s0022-3476(85)80501-1}.
+}

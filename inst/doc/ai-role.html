@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Carrie Daymont" />
+
+<meta name="date" content="2026-11-08" />
+
+<title>Use of AI assistance in growthcleanr development</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Use of AI assistance in growthcleanr
+development</h1>
+<h4 class="author">Carrie Daymont</h4>
+<h4 class="date">2026-11-08</h4>
+
+
+
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>The growthcleanr algorithm has been in development since 2010.
+Publicly released software has been available since 2017, and it has
+been available on CRAN since 2022. Algorithm and software development
+has been led by me (Carrie Daymont) with many crucial contributions from
+collaborators. Since November 2025, I have used generative AI
+(specifically Claude large language models (LLMs) by Anthropic) to
+improve growthcleanr software. Below I describe in more detail how AI
+was used so that users can judge for themselves how it bears on their
+own use of the package. I take responsibility for the algorithm,
+software, and documentation. However, the algorithm is long and complex,
+and I anticipate that there will be bugs and errors in documentation, as
+there have been with all releases prior to use of LLMs.</p>
+</div>
+<div id="generative-vs-predictive-ai" class="section level2">
+<h2>Generative vs predictive AI</h2>
+<p>Note that this document is about the use of generative AI to improve
+growthcleanr. The growthcleanr algorithm does not involve any predictive
+AI. If desired, one could implement the algorithm logic with a
+scientific calculator, the reference datasets, and a lot of scratch
+paper. However, it would take hours to evaluate a single patient with
+many measurements.</p>
+</div>
+<div id="data-security" class="section level2">
+<h2>Data security</h2>
+<p>I test real-world data independently. Claude has had access to (and
+sometimes created) synthetic data. Less commonly, Claude used values
+based on deidentified data that were adjusted as an extra guard against
+identification (e.g., an amount unspecified to Claude added to all
+weight values and several days subtracted from all ages).</p>
+</div>
+<div id="concepts" class="section level2">
+<h2>Concepts</h2>
+<p>The document discusses three important related concepts:</p>
+<ol style="list-style-type: decimal">
+<li><p>The algorithm specifications are the rules that define what the
+algorithm should do. I refer to the specifications below as the
+algorithm logic. For example, a key component of the logic is how
+implausible values are identified. What specific calculations and
+comparisons are made and in what order? What thresholds define
+implausibility in which circumstances?</p></li>
+<li><p>The implementation is the translation of that logic into code.
+The logic defines which calculations and comparisons are made and in
+what order. The implementation involves writing R code that performs
+those calculations and comparisons in the data, with attention to doing
+so efficiently for large datasets.</p></li>
+<li><p>The software is the package available to users that contains the
+code, as well as accompanying datasets, documentation, tests, and other
+related files.</p></li>
+</ol>
+</div>
+<div id="development-and-authorship-of-the-logic" class="section level2">
+<h2>Development and authorship of the logic</h2>
+<p>I have designed and/or approved all aspects of the logic, with
+contributions along the way from collaborators. The logic is grounded in
+clinical knowledge of typical and atypical growth, of how measurements
+are taken, and in the frequency of growth patterns in studied datasets.
+Much of the logic was developed before current LLMs existed. AI has been
+primarily involved in algorithm implementation and software development,
+but it has also provided some comments or suggestions for improving the
+logic, some of which were ultimately incorporated into the current
+logic. Specifically, AI provided a large amount of assistance choosing
+specific methods for smoothing the data for recentering medians, with my
+direction regarding choice of data and the degree of smoothing at
+specific ages.</p>
+</div>
+<div id="implementation" class="section level2">
+<h2>Implementation</h2>
+<p>Until February 2026, I implemented growthcleanr logic in Stata.
+Multiple people over the years have contributed to converting it to R
+and maintaining the R version. I never had time to develop the R skills
+to implement the complex logic in R, and certainly not to debug it well
+or optimize efficiency. In November 2025, I started working with Claude
+to reconcile the Stata and R versions, which surfaced multiple bugs and
+opportunities for improvement. In February 2026, I deprecated the Stata
+version. Since then, Claude has implemented logic changes in the R code
+with my close supervision. Claude has also suggested and implemented
+multiple improvements in efficiency, which have cut runtime by more than
+half for many datasets. Modifying growthcleanr has proven incredibly
+time consuming, even for skilled programmers who are experienced in
+working with growth data. Many of the improvements to growthcleanr in
+this release would not be possible without the use of LLMs.</p>
+</div>
+<div id="testing" class="section level2">
+<h2>Testing</h2>
+<p>growthcleanr testing previously involved a relatively small number of
+test patients with expected correct values. I began designing test
+patients with expected correct behavior for Claude to run after every
+significant code change. Some of these tested logic (informed by real
+data and literature), others implementation. After working this way for
+several months, Claude developed more testing on its own, with my review
+of correct behavior. This testing is combined with my independent
+testing on real-world data in a different environment.</p>
+</div>
+<div id="code-review" class="section level2">
+<h2>Code review</h2>
+<p>I did not review most of this code in detail. My knowledge of R is
+not strong enough for line-by-line review to be a meaningful check.
+Confidence that the code does what the logic specifies comes instead
+from careful specification and testing the code’s behavior against the
+rules I set using a variety of datasets. Claude ran many of these tests
+using synthetic data for my review, but I also separately tested the
+algorithm in deidentified real-world data. A reasonable concern about
+large language models is that they can produce code, or text, that looks
+correct but is not. I cannot eliminate this risk but have mitigated it
+using independent logic development (mine), extensive testing against
+specified behavior, review of the documentation by myself or
+collaborators, and multiple reconciliations of logic specifications,
+code, tests, and documentation.</p>
+</div>
+<div id="documentation" class="section level2">
+<h2>Documentation</h2>
+<p>Claude drafted a large portion of the package documentation, and I
+supervised numerous rounds of edits, reconciling the logic, code, inline
+comments, and other documentation. Notable exceptions include the how-to
+guides, the fact sheet, and the researcher overview on GitHub pages,
+which were developed by contributors and reviewed by me. The
+documentation is extensive. I have spot-checked but not directly
+reviewed inline comments in the code. The vignettes and other public
+documentation have been reviewed in detail by myself or a collaborator
+close to the time of release, although some edits have been made since
+those full reviews as minor code modifications were made.</p>
+</div>
+<div id="responsibility-transparency-and-limitations" class="section level2">
+<h2>Responsibility, transparency, and limitations</h2>
+<p>I take responsibility for the released code and documentation. As
+mentioned, as with prior releases, I expect there will be some software
+bugs and documentation errors. I welcome bug reports, questions, and
+suggestions through the project’s issue tracker and will address them as
+quickly as possible. The logic and all code are public. Some tests are
+not public because of CRAN package size limitations; these tests are
+available on request.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

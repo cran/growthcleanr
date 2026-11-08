@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2026-11-08" />
+
+<title>Running growthcleanr from the command line</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Running growthcleanr from the command
+line</h1>
+<h4 class="date">2026-11-08</h4>
+
+
+
+<p>growthcleanr ships a small command-line driver: a script that takes a
+CSV of growth measurements in, cleans it, and writes a CSV out. It is
+meant for people who want to run growthcleanr from a terminal or a batch
+job without writing any R code – for example from a shell script, a
+scheduler, or another language that can call a command.</p>
+<p>New to growthcleanr? See <code>vignette(&quot;new-start-here&quot;)</code> for
+what it does and the input it expects.</p>
+<p><strong>Please note</strong>: The updated command-line driver is a
+relatively late addition to growthcleanr. It has not been as extensively
+tested as the R interface and Shiny app, and the documentation is not as
+fully developed. If you identify issues with the driver, please contact
+us through GitHub or email <a href="mailto:cdaymont@pennstatehealth.psu.edu" class="email">cdaymont@pennstatehealth.psu.edu</a>.</p>
+<div id="what-you-need" class="section level1">
+<h1>What you need</h1>
+<ul>
+<li><strong>R installed</strong>, so you can run <code>Rscript</code>.
+(You do not have to write R.)</li>
+<li><strong>growthcleanr installed</strong> once:</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;growthcleanr&quot;</span>)</span></code></pre></div>
+<p>The driver script ships inside the package. You do not download it
+separately; ask growthcleanr where it is:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="va">DRIVER</span><span class="op">=</span><span class="va">$(</span><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">&#39;cat(growthcleanr::gc_cli_path())&#39;</span><span class="va">)</span></span></code></pre></div>
+<p>That stores the script’s path in a shell variable <code>DRIVER</code>
+you reuse below. (Run it again in each new terminal session.)</p>
+</div>
+<div id="the-basic-run" class="section level1">
+<h1>The basic run</h1>
+<p>Two arguments: the input CSV and the output CSV.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> input.csv output.csv</span></code></pre></div>
+<p>Your input CSV should have one row per measurement, with the columns
+growthcleanr expects: <code>subjid</code>, <code>param</code>,
+<code>agedays</code>, <code>sex</code>, <code>measurement</code>, and
+optionally <code>id</code>. For the exact format (parameter names,
+units, sex codes) see <code>vignette(&quot;example-scripts&quot;)</code>; for how
+to produce the CSV file, see <code>vignette(&quot;csv-format&quot;)</code>. If
+your columns are named differently, you can point at them without
+renaming your file – see <strong>Different column names</strong>
+below.</p>
+<p>The output CSV is your data back with growthcleanr’s result columns
+added – most importantly <code>exclude</code> (<code>Include</code> or
+an exclusion code) and <code>bin_exclude</code>
+(<code>Include</code>/<code>Exclude</code>). See
+<code>vignette(&quot;output&quot;)</code> for every column.</p>
+<p>While it runs you will see a short <strong>cleaning in
+progress</strong> line, a progress counter, and a short cleaning summary
+(included and excluded counts for each measurement type, and any values
+set aside). To silence that, add <code>--quiet</code>; to see
+step-by-step detail, add <code>--verbose</code>.</p>
+</div>
+<div id="large-datasets-parallel-and-checkpointing" class="section level1">
+<h1>Large datasets: parallel and checkpointing</h1>
+<p>These are the options you are most likely to reach for on real
+datasets. They do not change your results (growthcleanr cleans each
+subject independently); they make a big run faster and safer. The R
+vignette <code>vignette(&quot;large-datasets&quot;)</code> explains them in depth;
+the same options are flags here.</p>
+<p><strong>Run on several cores</strong> with <code>--parallel</code>
+(growthcleanr picks the core count for you; pin it with
+<code>--cores N</code>):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> input.csv output.csv <span class="at">--parallel</span></span></code></pre></div>
+<p><strong>Checkpointing is automatic.</strong> growthcleanr cleans
+large datasets in checkpoints – writing each finished checkpoint to disk
+so only one checkpoint is being cleaned in memory at a time – which is
+what keeps a big run fast and stops it from running out of memory and
+crashing. By default the checkpoint files go to a temporary folder and
+are deleted automatically when the run finishes, so you do not have to
+do anything. Small and typical datasets stay in memory and write
+nothing.</p>
+<p>To keep the checkpoint files at a location you choose – so a long run
+can <strong>resume</strong> where it stopped – point
+<code>--checkpoint-dir</code> at a <em>new, empty</em> folder. If a run
+is interrupted, re-run the same command with
+<code>--checkpoint-resume</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># first run</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> big.csv big_cleaned.csv <span class="at">--checkpoint-dir</span> gc_checkpoints</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co"># if it was interrupted, resume (same folder, same data)</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> big.csv big_cleaned.csv <span class="at">--checkpoint-dir</span> gc_checkpoints <span class="at">--checkpoint-resume</span></span></code></pre></div>
+<p><code>--checkpoint-size N</code> sets how many subjects go in each
+saved file (default 5000; usually leave it). Combine with
+<code>--parallel</code> – fast <em>and</em> resumable:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> big.csv big_cleaned.csv <span class="at">--parallel</span> <span class="at">--checkpoint-dir</span> gc_checkpoints</span></code></pre></div>
+<p><code>--no-keep-checkpoints</code> deletes the saved files after a
+successful run.</p>
+<p>Use <code>--no-checkpoint</code> to turn checkpointing off entirely
+and never write intermediate data to disk (the run stays fully in
+memory). On a very large dataset that can slow the run down or run out
+of memory; reach for it when the environment must not write data to disk
+at all.</p>
+</div>
+<div id="adult-data" class="section level1">
+<h1>Adult data</h1>
+<p>By default growthcleanr treats measurements at age 20 years and older
+with the adult algorithm. Two flags matter most:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> adults.csv out.csv <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">--adult-cutpoint</span> 18 <span class="dt">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">--adult-permissiveness</span> looser</span></code></pre></div>
+<p><code>--adult-cutpoint</code> (clamped to 18-20) sets the
+pediatric/adult boundary; <code>--adult-permissiveness</code> picks how
+strict the adult algorithm is
+(<code>loosest</code>/<code>looser</code>/<code>tighter</code>/<code>tightest</code>;
+in general, <code>looser</code>/<code>loosest</code> flag fewer values
+and <code>tighter</code>/<code>tightest</code> flag more). To choose a
+level, see Section 1D of <code>vignette(&quot;configuration&quot;)</code>.
+Fine-grained control over individual adult thresholds is only available
+from R (the <code>adult_overrides</code> argument to
+<code>cleangrowth()</code>), not from the command line.</p>
+<p>If your adult weights come from an organization that uses scales or
+recording practices with a known upper limit (or if an upper limit is
+apparent in the data), provide the limit in pounds with
+<code>--adult-scale-max-lbs</code> (for example
+<code>--adult-scale-max-lbs 400</code>). This replaces the 2.x
+<code>--weightcap</code> flag, which was in kilograms. Pounds are used
+because most scale limits we have seen are in pounds.</p>
+</div>
+<div id="different-column-names" class="section level1">
+<h1>Different column names</h1>
+<p>If your CSV does not use the standard column names or coding, you can
+provide the real column names instead of editing your file:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> mydata.csv out.csv <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="at">--subjid-col</span> patient_id <span class="at">--agedays-col</span> age_days <span class="at">--measurement-col</span> value</span></code></pre></div>
+<p>The output keeps your original column names.</p>
+</div>
+<div id="wide-and-semi-wide-layouts" class="section level1">
+<h1>Wide and semi-wide layouts</h1>
+<p>growthcleanr’s default is <strong>long</strong> format (one row per
+measurement). It can also read two other shapes; you tell it which with
+<code>--input-format</code> and, when your columns are not literally
+named like the parameters, which column holds which measurement.</p>
+<p>You name the column for each measurement with a
+<code>--...-weight</code>/<code>-height</code>/<code>-head</code>/<code>-length</code>
+flag, and – if that column is not in metric units – add the matching
+<code>--weight-units</code>/<code>--height-units</code>/<code>--head-units</code>/<code>--length-units</code>
+flag. Each units flag takes <code>kg</code>/<code>lbs</code> (weight) or
+<code>cm</code>/<code>in</code> (height, head, length) and defaults to
+metric, so you only add it for imperial columns. growthcleanr converts
+imperial to metric internally. (This pairs a column name with a units
+choice the same way the growthcleanr Shiny app does.)</p>
+<p><strong>Semi-wide</strong> – one row per visit, one column per
+measurement. Say a visit row has
+<code>subjid, agedays, sex, WT, ht</code>, where <code>WT</code> is
+weight in kg and <code>ht</code> is height in cm:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> visits.csv out.csv <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">--input-format</span> semi_wide <span class="dt">\</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">--semiwide-col-weight</span> WT <span class="at">--semiwide-col-height</span> ht</span></code></pre></div>
+<p>If <code>WT</code> instead held <strong>pounds</strong>, add the
+units flag and growthcleanr converts it:
+<code>--semiwide-col-weight WT --weight-units lbs</code>. If your
+columns are literally named <code>WEIGHTKG</code>/<code>HEIGHTCM</code>,
+you can drop the <code>--semiwide-col-*</code> flags entirely.</p>
+<p><strong>Wide</strong> – one row per subject, with repeated
+observation blocks. Say a subject row has
+<code>subjid, sex, WT_1, WT_2, ht_1, ht_2, agedays_1, agedays_2</code>.
+You give the column <em>prefix</em> (<code>WT</code>, <code>ht</code>);
+growthcleanr finds the numbered blocks:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> wide.csv out.csv <span class="dt">\</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">--input-format</span> wide <span class="dt">\</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">--wide-weight</span> WT <span class="at">--wide-height</span> ht</span></code></pre></div>
+<p>The same <code>--*-units</code> flags apply here too
+(e.g. <code>--wide-weight WT --weight-units lbs</code>).</p>
+<p>By default the output comes back in the same shape as the input; add
+<code>--output-format long</code> to get long output instead.</p>
+</div>
+<div id="recoding-sex-and-parameters" class="section level1">
+<h1>Recoding sex and parameters</h1>
+<p>growthcleanr recognizes common sex codes
+(0/<code>m</code>/<code>male</code>/<code>boy</code>,
+1/<code>f</code>/<code>female</code>/<code>girl</code>) and the
+spelled-out parameter names. If your data uses other codes, map
+them.</p>
+<p><strong>Sex</strong> – supply both sides together (each replaces one
+side of the coding):</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> input.csv out.csv <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="at">--sex-male</span> <span class="st">&quot;0,M,Male&quot;</span> <span class="at">--sex-female</span> <span class="st">&quot;1,F,Female&quot;</span></span></code></pre></div>
+<p><strong>Parameters</strong> – growthcleanr does not guess
+abbreviations (a bare <code>WT</code> might be a sample weight, not body
+weight), so map your labels to the parameter they mean with
+<code>--param-weight</code>/<code>-height</code>/<code>-head</code>/<code>-length</code>.
+A comma-separated list is allowed. As with the wide/semi-wide flags, add
+a <code>--*-units</code> flag when a mapped column is imperial:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> input.csv out.csv <span class="dt">\</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="at">--param-weight</span> <span class="st">&quot;WT,body_wt&quot;</span> <span class="at">--param-height</span> <span class="st">&quot;HT&quot;</span></span></code></pre></div>
+<p>If one of those labels held pounds, name it in its own run with the
+units flag
+(<code>--param-weight &quot;WT_LBS&quot; --weight-units lbs</code>).</p>
+</div>
+<div id="seeing-every-option" class="section level1">
+<h1>Seeing every option</h1>
+<p>For the complete, current list of flags with one-line help, ask the
+driver:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="st">&quot;</span><span class="va">$DRIVER</span><span class="st">&quot;</span> <span class="at">--help</span></span></code></pre></div>
+</div>
+<div id="flags-from-growthcleanr-2.x" class="section level1">
+<h1>Flags from growthcleanr 2.x</h1>
+<p>If you have shell scripts written for the growthcleanr 2.x driver,
+update the flags as below. Flags now use hyphens rather than
+underscores, and single-letter flags are no longer accepted (see
+Tips).</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>2.x flag</th>
+<th>v3 flag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>--adult_cutpoint</code></td>
+<td><code>--adult-cutpoint</code></td>
+<td>Same meaning (years); clamped to 18-20.</td>
+</tr>
+<tr class="even">
+<td><code>--weightcap</code></td>
+<td><code>--adult-scale-max-lbs</code></td>
+<td>Now in pounds, not kilograms.</td>
+</tr>
+<tr class="odd">
+<td><code>--numbatches</code></td>
+<td><code>--parallel</code> (and optionally <code>--cores</code>)</td>
+<td><code>--parallel</code> picks the core count; <code>--cores</code>
+sets it.</td>
+</tr>
+<tr class="even">
+<td><code>--adult_split</code></td>
+<td><em>(removed)</em></td>
+<td>Batching is automatic; see <code>--batch-size</code> and
+checkpointing above.</td>
+</tr>
+<tr class="odd">
+<td><code>--quietly</code></td>
+<td><code>--quiet</code></td>
+<td>Progress now prints by default; <code>--quiet</code> turns it
+off.</td>
+</tr>
+<tr class="even">
+<td><code>--sdrecenter</code></td>
+<td><em>(removed)</em></td>
+<td>The built-in recentering reference is the default. A table of your
+own medians can be supplied only from R (<code>sd.recenter</code>); see
+<code>vignette(&quot;recentering&quot;)</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>The version 3 driver writes <code>exclude</code> (plus
+<code>bin_exclude</code>, <code>unit_error_range</code>, and for data
+with adult rows <code>mean_ht</code>) instead of 2.x’s
+<code>gcr_result</code>, with renamed codes (see the mapping in
+<code>vignette(&quot;experienced-start-here&quot;)</code>). Scripts that found the
+old driver with <code>system.file(&quot;exec&quot;, &quot;gcdriver.R&quot;, ...)</code> now
+get an empty path, and <code>Rscript</code> then fails with a confusing
+parse error.</p>
+</div>
+<div id="tips" class="section level1">
+<h1>Tips</h1>
+<ul>
+<li><strong>Same results as R.</strong> The CLI driver is a thin wrapper
+around <code>cleangrowth()</code>; the output is identical to the
+equivalent R call.</li>
+<li><strong>Long flags only.</strong> Write every option in its full
+<code>--flag-name</code> form. Single-letter flags such as
+<code>-w</code> or <code>-s</code> are rejected with an error, because
+several letters meant different options in growthcleanr 2.x.
+(<code>-h</code> still shows the help.)</li>
+<li><strong>Exit codes.</strong> The command exits <code>0</code> on
+success and non-zero on any error (bad input file, an unrecognized
+option value, a failed run), with a message on standard error – so you
+can check it in a shell script.</li>
+<li><strong>Progress in a log.</strong> For a long checkpointed run you
+can add <code>--log-file run.log</code> to also write progress to a file
+a colleague can watch.</li>
+<li><strong>Opening the output in Excel?</strong> Identifier columns are
+written out exactly as submitted, so a
+<code>subjid</code>/<code>id</code> that begins with <code>=</code>,
+<code>+</code>, <code>-</code>, or <code>@</code> may be read as a
+formula if you double-click the CSV open in a spreadsheet (a general CSV
+caveat, not specific to growthcleanr). If you don’t fully trust the
+identifier values, import the file as text instead of opening it
+directly. See <code>vignette(&quot;output&quot;)</code> for detail.</li>
+<li><strong>Windows shells.</strong> The examples use a macOS/Linux
+shell. In Windows <code>cmd</code> or PowerShell the shell-variable
+syntax differs; either adapt it, or replace <code>&quot;$DRIVER&quot;</code> with
+the full path to the driver (print it with
+<code>Rscript -e &quot;cat(growthcleanr::gc_cli_path())&quot;</code>).
+growthcleanr runs the same on every platform.</li>
+<li><strong>Prefer R?</strong> Everything here is available directly
+from <code>cleangrowth()</code>; the copy-and-paste R scripts are in
+<code>vignette(&quot;example-scripts&quot;)</code>.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

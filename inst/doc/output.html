@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2026-11-08" />
+
+<title>Output: the cleangrowth() return value</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Output: the cleangrowth() return value</h1>
+<h4 class="date">2026-11-08</h4>
+
+
+
+<p>Catalog of every column <code>cleangrowth()</code> can return, the
+option(s) that turn each column on, and the values each column can take.
+Exclusion-code text values (the contents of <code>exclude</code>,
+<code>bin_exclude</code>, <code>tri_exclude</code>, and the SDE labels
+of <code>cf_status</code>) are listed in their canonical reference and
+only summarized here.</p>
+<p><strong>Single source of truth for exclusion codes:</strong>
+<code>vignette(&quot;exclusion-codes&quot;)</code>.</p>
+<p><strong>Code truth.</strong> The authoritative output-column assembly
+is at the bottom of <code>cleangrowth()</code> in
+<code>R/child_clean.R</code>: bin/tri derivation, <code>cf_status</code>
+NA fill, <code>corr_val</code>/<code>corr_pt</code> construction,
+<code>unit_error_range</code> flag, <code>gc_internal_id</code> snapshot
++ user-<code>id</code> restoration, the <code>keep_cols</code> trim, and
+the rename pass that restores the user’s column names. The
+<code>id</code> contract itself is implemented at entry
+(<code>user_id_orig</code> snapshot + <code>id_was_regened</code> flag)
+and consumed at the trim above.</p>
+<p><strong>Requested columns are always returned.</strong> Every column
+an option turns on is present in the output whenever that option is set,
+whatever ages the data contain. Adult-only input still returns the
+child-only columns (for example <code>cf_detail</code>,
+<code>qm_detail</code>, <code>recenter_detail</code>, and the
+<code>debug</code> z-scores), filled with the values adult rows get in
+mixed data: <code>cf_status</code> is <code>&quot;Adult&quot;</code> and the other
+child-only columns are <code>NA</code>. Column names, order, and types
+are the same as for mixed input.</p>
+<p><strong>Which algorithm cleaned a row.</strong> Rows with
+<code>agedays &gt;= adult_cutpoint * 365.25</code> are cleaned by the
+adult algorithm and the rest by the child algorithm. The output shows
+this in the <code>-C-</code> (child) / <code>-A-</code> (adult) marker
+in most Detailed codes (§1b; <code>vignette(&quot;exclusion-codes&quot;)</code>,
+“Output levels”) and in the <code>&quot;Adult&quot;</code> label in
+<code>cf_status</code> (§4) and <code>corr_val</code> /
+<code>corr_pt</code> (§5).</p>
+<p><strong>Column-name preservation.</strong> The six data columns
+(<code>id</code>, <code>subjid</code>, <code>param</code>,
+<code>agedays</code>, <code>sex</code>, <code>measurement</code>) are
+renamed in the output to match whatever name the user supplied (via the
+data-frame–style column-name arguments, or — for the vector style —
+derived from the call expression). The canonical names below are the
+defaults; user-supplied names are passed through unchanged.</p>
+<blockquote>
+<p><strong>Note on quality-measure (QM) code.</strong> growthcleanr
+contains a small amount of code that computes eligibility values for a
+related package in development that would calculate data-quality
+measures. This code is mentioned in the technical documentation only to
+explain its presence; it is <strong>not used in cleaning</strong> and
+never affects any exclusion. Sections describing it are marked <em>“For
+a related package in development — not used in cleaning.”</em> These
+values are off by default and are not part of <code>full_detail</code>;
+if you want to inspect them, set <code>qm_detail = TRUE</code> (see §5c
+below).</p>
+</blockquote>
+<hr />
+<div id="standard-output-always-returned" class="section level2">
+<h2>1. Standard output (always returned)</h2>
+<p>Eight columns, returned regardless of options. With
+<code>unit_error_range</code> (on by default; see §2), a default run
+returns nine, or ten when the data has adult rows (<code>mean_ht</code>;
+see §6c).</p>
+<blockquote>
+<p><strong>Output fidelity.</strong> The data columns echoed from input
+— <code>id</code>, <code>subjid</code>, <code>param</code>,
+<code>agedays</code>, <code>sex</code>, <code>measurement</code> — carry
+the user’s <strong>verbatim submitted values</strong>; gc never silently
+alters or drops an input value. Where gc must reinterpret a value to run
+the algorithm (imperial → metric, <code>LENGTHCM</code> →
+<code>HEIGHTCM</code>, fractional <code>agedays</code> → whole days,
+<code>sex</code> → <code>0</code>/<code>1</code>/<code>NA</code>,
+<code>measurement</code> <code>0</code> → <code>NaN</code>), that
+reinterpretation is internal-only; the submitted value is what comes
+back. gc’s interpreted <code>sex</code> is separately available as
+<code>gc_internal_sex</code> (§7). A value gc cannot use
+(uninterpretable sex, <code>0</code>/negative measurement) is flagged
+<code>Exclude-Missing-Info</code> but still returned as submitted.
+Columns come back under the user’s own names, and a column with the
+user’s name holds only the user’s values: a user column is renamed
+<code>userinput_&lt;name&gt;</code> (with a warning) only when its name
+matches a column growthcleanr returns in that run, for example
+<code>exclude</code> when re-cleaning growthcleanr output.</p>
+</blockquote>
+<blockquote>
+<p><strong>Caveat — opening output CSVs in a spreadsheet.</strong>
+Because identifier columns are echoed verbatim, a value that begins with
+<code>=</code>, <code>+</code>, <code>-</code>, or <code>@</code> (for
+example a <code>subjid</code> or <code>id</code> literally recorded as
+<code>=FOO</code>) is written to the output CSV unchanged. Spreadsheet
+programs (Excel, LibreOffice, Google Sheets) may interpret such a
+leading character as a <strong>formula</strong> when the file is opened
+directly — a general property of CSV files (“CSV injection”), not
+specific to growthcleanr. This applies to every gc surface that writes a
+CSV: the command-line driver, the template script, and the Shiny app’s
+CSV download. growthcleanr does <strong>not</strong> neutralize these
+cells, precisely because doing so would violate the verbatim-output
+contract above. If the output will be opened in a spreadsheet and you do
+not fully trust the identifier values, import the CSV as text (the
+spreadsheet’s “import”/“get data” path, choosing text columns) rather
+than double-clicking it, or read it with R/Python/a database, which are
+unaffected.</p>
+</blockquote>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>id</code></td>
+<td>as supplied (any)</td>
+<td>The user’s original row identifier, returned <strong>exactly as
+supplied</strong> — including <code>NA</code>s and duplicates — under
+the user’s own column name. <code>id</code> is fully optional; when it
+is absent / <code>NULL</code> / <code>NA</code> / non-unique, gc issues
+a warning and auto-generates sequential integer ids <code>1:N</code> (in
+input row order) for internal use, but when an id was supplied the
+output keeps the caller’s values so results can still be mapped back to
+the input rows. When no id was supplied (long input), the output
+<code>id</code> column holds the generated <code>1:N</code>. A unique
+per-row id (not per-subject or per-encounter) is recommended for stable,
+traceable output. To see the id gc actually used internally, request
+<code>gc_internal_id</code> (see §6). <em>Note:</em> the incremental-run
+wrapper <code>gc_partial_run()</code> orders its output by
+<code>id</code> (not input row order) and requires a unique, stable
+<code>id</code>; see <code>?gc_partial_run</code>. For semi-wide/wide
+input returned as long output, your id (if any) comes back under your
+own column name, repeated on each measurement from that input row, and
+growthcleanr’s per-measurement number is in <code>gc_internal_id</code>;
+with no id column there is no <code>id</code> column. The
+<code>subjid</code>, <code>sex</code> and <code>agedays</code> columns
+come back under your own column names (for wide input, your age prefix),
+as in long input.</td>
+</tr>
+<tr class="even">
+<td><code>subjid</code></td>
+<td>as supplied</td>
+<td>Subject identifier, passed through unchanged.</td>
+</tr>
+<tr class="odd">
+<td><code>param</code></td>
+<td>as supplied</td>
+<td>The param <strong>exactly as submitted</strong> —
+<code>WEIGHTLBS</code> / <code>HEIGHTIN</code> / <code>LENGTHCM</code>
+are returned unchanged, not relabeled. gc converts imperial → metric and
+relabels <code>LENGTHCM</code> → <code>HEIGHTCM</code>
+<em>internally</em> for the algorithm, but the output preserves the
+user’s submission (output fidelity).</td>
+</tr>
+<tr class="even">
+<td><code>agedays</code></td>
+<td>as supplied</td>
+<td>Age in days at measurement, passed through unchanged (including its
+type, e.g. text or a time difference). Cleaning uses whole days (a
+fractional age such as 1435.4 is cleaned as day 1435), but the submitted
+value is what comes back; the whole-day value is
+<code>gc_internal_agedays</code> (§6b). On the date route with no age
+column, this column holds the ages growthcleanr computed. With
+<code>age_source = &quot;dates&quot;</code> and an age column present, your age
+column comes back unchanged under its own name and the computed ages are
+returned as <code>gc_internal_agedays</code> (no switch needed).</td>
+</tr>
+<tr class="odd">
+<td><code>sex</code></td>
+<td>as supplied</td>
+<td>Sex <strong>exactly as submitted</strong> — the verbatim value
+(<code>0</code>/<code>1</code>, <code>&quot;m&quot;</code>/<code>&quot;M&quot;</code>,
+<code>&quot;f&quot;</code>/<code>&quot;F&quot;</code>, or any uninterpretable code such as
+<code>&quot;U&quot;</code>/<code>9</code>). gc coerces this to an integer
+(<code>0</code> = male, <code>1</code> = female, else <code>NA</code>)
+<em>internally</em> for the algorithm; that interpreted value is
+surfaced as <code>gc_internal_sex</code> (§7) under
+<code>internal_detail</code>, <code>debug</code>, or
+<code>full_detail</code>. An uninterpretable sex routes the row to
+<code>Exclude-Missing-Info</code> but the submitted value is still
+returned here.</td>
+</tr>
+<tr class="even">
+<td><code>measurement</code></td>
+<td>as supplied</td>
+<td>The measurement value <strong>exactly as submitted</strong> —
+including a submitted <code>0</code> (returned as <code>0</code>, not
+<code>NaN</code>), original imperial units, and its type: a text or
+factor column comes back as text or a factor (e.g. <code>&quot;12.50&quot;</code>
+stays <code>&quot;12.50&quot;</code>, and a value that is not a number comes back
+as entered). For semi-wide/wide input with long output, values from a
+factor column are taken by their labels, and if the value columns are of
+different types (e.g. one text, one numeric) the combined column is
+text. gc’s internal working value (imperial → metric; <code>0</code> →
+<code>NaN</code> for missingness) is used only inside the algorithm and
+is not surfaced. A <code>0</code> (or negative) measurement routes the
+row to <code>Exclude-Missing-Info</code> but the submitted value is
+still returned.</td>
+</tr>
+<tr class="odd">
+<td><code>exclude</code></td>
+<td>factor</td>
+<td>The <strong>Summary</strong> exclusion code (or
+<code>&quot;Include&quot;</code>). 14 consolidated codes spanning child + adult.
+Full catalog, levels, and the Detailed crosswalk:
+<code>vignette(&quot;exclusion-codes&quot;)</code>. The step-level
+<strong>Detailed</strong> code is available in
+<code>exclude_detailed</code> (§1b).</td>
+</tr>
+<tr class="even">
+<td><code>bin_exclude</code></td>
+<td>character</td>
+<td><code>&quot;Include&quot;</code> or <code>&quot;Exclude&quot;</code> — collapses every
+non-Include <code>exclude</code> code (including SDE codes and
+<code>Exclude-Missing-Info</code> /
+<code>Exclude-HC-Out-of-Range</code>) to <code>&quot;Exclude&quot;</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="b.-exclude_detailed-when-exclude_detail-true-or-full_detail-true" class="section level2">
+<h2>1b. <code>exclude_detailed</code> (when
+<code>exclude_detail = TRUE</code> or
+<code>full_detail = TRUE</code>)</h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>exclude_detailed</code></td>
+<td>factor</td>
+<td>The <strong>Detailed</strong> exclusion code (or
+<code>&quot;Include&quot;</code>). Step-level; keeps the child (<code>-C-</code>)
+/ adult (<code>-A-</code>) algorithm prefix; folds away the
+repeated-value (RV / firstRV / allRV), <code>-All</code>, and
+round-iteration distinctions. Every Detailed code maps to exactly one
+Summary <code>exclude</code> code. Shared “for all” codes
+(<code>Exclude-Identical</code>, <code>Exclude-Extraneous</code>,
+<code>Exclude-Missing-Info</code>, <code>Exclude-HC-Out-of-Range</code>,
+<code>Exclude-Not-GC-Param</code>) carry no prefix at any level. Full
+catalog and Detailed→Summary crosswalk:
+<code>vignette(&quot;exclusion-codes&quot;)</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="unit_error_range-on-by-default-set-unit_error_range-false-to-omit" class="section level2">
+<h2>2. <code>unit_error_range</code> (on by default; set
+<code>unit_error_range = FALSE</code> to omit)</h2>
+<p>Informational only — never affects <code>exclude</code> and is not in
+<code>exclude.levels</code>. <strong>Not</strong> included in
+<code>full_detail</code>; it has its own default-on switch. Real values
+from people with atypical growth (for example, extremely premature
+infants, severe obesity, some medical conditions) can fall in the
+unit-error range.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>unit_error_range</code></td>
+<td>logical</td>
+<td><code>TRUE</code> when the value’s magnitude is consistent with a
+metric/imperial unit-conversion error AND the value is not within the
+plausible z = −3 to +3 band; <code>FALSE</code> otherwise.
+<code>FALSE</code> on rows that were not cleaned
+(<code>Exclude-Missing-Info</code>,
+<code>Exclude-HC-Out-of-Range</code>,
+<code>Exclude-Not-GC-Param</code>), on rows with missing age, and on any
+row without a z3 lookup. Child z3 cutoffs come from
+<code>inst/extdata/child_z3_reference.csv.gz</code>; adult cutoffs from
+the embedded NHANES CSD reference.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="tri_exclude-when-tri_exclude-true-or-full_detail-true" class="section level2">
+<h2>3. <code>tri_exclude</code> (when <code>tri_exclude = TRUE</code> or
+<code>full_detail = TRUE</code>)</h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tri_exclude</code></td>
+<td>character</td>
+<td><code>&quot;Include&quot;</code>, <code>&quot;Same-Day&quot;</code>, or
+<code>&quot;Exclude&quot;</code>. <code>&quot;Same-Day&quot;</code> covers the
+same-day-extraneous codes — the shared <code>Exclude-Identical</code> /
+<code>Exclude-Extraneous</code> (which consolidate the former child
+<code>Exclude-C-Identical</code>/<code>Exclude-C-Extraneous</code> and
+adult
+<code>Exclude-A-Identical</code>/<code>Exclude-A-Extraneous</code>);
+everything else non-Include is <code>&quot;Exclude&quot;</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="cf_detail-when-cf_detail-true-or-full_detail-true" class="section level2">
+<h2>4. <code>cf_detail</code> (when <code>cf_detail = TRUE</code> or
+<code>full_detail = TRUE</code>)</h2>
+<p>Six columns describing carried-forward (CF) detection and rescue
+(Child Step 6). Adult rows are labeled <code>&quot;Adult&quot;</code> (in
+<code>cf_status</code>) and <code>NA</code> in the other columns. The
+last three (<code>imperial</code>, <code>cf_dage_orig</code>,
+<code>cf_dage_next</code>) are design aids for CF-logic development.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>cf_status</code></td>
+<td>character</td>
+<td><code>&quot;Orig&quot;</code> (originator of a CF string), <code>&quot;CF-R&quot;</code>
+(carried forward and rescued (not excluded as CF); a later step may
+still exclude it), <code>&quot;CF-NR&quot;</code> (carried forward, not rescued —
+<code>Exclude-CF</code> in <code>exclude</code>,
+<code>Exclude-C-CF</code> in <code>exclude_detailed</code>),
+<code>&quot;CF-E&quot;</code> (CF on a day that also has an Include — same-day
+extraneous CF, never rescue-eligible; in <code>cf_rescue = &quot;all&quot;</code>,
+same-day CFs are not excluded at this step and are labelled
+<code>CF-R</code>, with <code>cf_deltaz</code> NA; Child Step 13 then
+chooses one value for the day, so such a row can end as
+<code>Exclude-Extraneous</code>), <code>&quot;Not-CF&quot;</code> (no CF
+relationship), or <code>&quot;Adult&quot;</code> (adult row; CF detection not
+applicable).</td>
+</tr>
+<tr class="even">
+<td><code>cf_deltaz</code></td>
+<td>numeric</td>
+<td>Absolute uncorrected-z (<code>sd.orig</code>) difference between the
+CF row and its originator — the value used for rescue evaluation.
+<code>NA</code> except on carried-forward rows; also <code>NA</code> on
+<code>CF-E</code> rows (they do not participate in string detection).
+The whole string is decided on its last carried-forward value; values
+shown on earlier rows are informational.</td>
+</tr>
+<tr class="odd">
+<td><code>cf_nextz</code></td>
+<td>numeric</td>
+<td>Signed change in <code>sd.orig</code> from a CF row
+(<code>CF-R</code> or <code>CF-NR</code>) to the next non-CF value that
+is Included at the time of Child Step 6 (temporary same-day extraneous
+values do not count). <code>NA</code> for non-CF rows, <code>CF-E</code>
+rows, and when no eligible next value exists. The whole string is
+decided on its last carried-forward value; values shown on earlier rows
+are informational.</td>
+</tr>
+<tr class="even">
+<td><code>imperial</code></td>
+<td>logical</td>
+<td>Row-level whole/half imperial-unit flag: <code>TRUE</code> when the
+value is a whole number of pounds (<code>WEIGHTKG</code>) or a
+whole/half inch (<code>HEIGHTCM</code>/<code>HEADCM</code>), within 0.01
+of the imperial unit; computed from <code>v.orig</code>. <code>NA</code>
+on missing-measurement rows (<code>v.orig</code> is <code>NaN</code>)
+and adult rows.</td>
+</tr>
+<tr class="odd">
+<td><code>cf_dage_orig</code></td>
+<td>integer</td>
+<td>Day gap from a CF row’s originator to the CF row
+(<code>agedays_CF − agedays_orig</code>; always positive). Populated for
+<code>CF-R</code>/<code>CF-NR</code> rows (not same-day CFs in
+<code>cf_rescue = &quot;all&quot;</code>, which are labelled <code>CF-R</code> but
+have <code>NA</code>); <code>NA</code> elsewhere
+(incl. <code>CF-E</code> and non-CF rows).</td>
+</tr>
+<tr class="even">
+<td><code>cf_dage_next</code></td>
+<td>numeric</td>
+<td>Day gap from a CF row (<code>CF-R</code>/<code>CF-NR</code>) to the
+next eligible non-CF Included value
+(<code>agedays_next − agedays_CF</code>; always positive) — the agedays
+analogue of <code>cf_nextz</code>. <code>NA</code> for non-CF rows,
+<code>CF-E</code> rows, and at the end of a subject/param series.</td>
+</tr>
+</tbody>
+</table>
+<p>The current CF-rescue rule and the meaning of each of these columns
+is documented in full in <code>vignette(&quot;cf-rescue&quot;)</code>.</p>
+<hr />
+</div>
+<div id="corr_detail-when-corr_detail-true-or-full_detail-true" class="section level2">
+<h2>5. <code>corr_detail</code> (when <code>corr_detail = TRUE</code> or
+<code>full_detail = TRUE</code>)</h2>
+<p>Two columns labeling gestational-age (GA) correction status (Child
+Step 2b). A value is “Corrected” iff its GA-corrected recentered z
+(<code>ctbc.sd</code>) differs from its uncorrected recentered z
+(<code>tbc.sd</code>).</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>corr_val</code></td>
+<td>character</td>
+<td>Per-value label: <code>&quot;Corrected&quot;</code>
+(<code>ctbc.sd != tbc.sd</code>), <code>&quot;Uncorrected&quot;</code>, or
+<code>&quot;Adult&quot;</code> (adult row,
+i.e. <code>agedays &gt;= adult_cutpoint * 365.25</code>). Child
+<code>Exclude-Missing-Info</code> rows are <code>&quot;Uncorrected&quot;</code>,
+not <code>&quot;Adult&quot;</code> (age, not z-score presence, drives the
+child/adult split).</td>
+</tr>
+<tr class="even">
+<td><code>corr_pt</code></td>
+<td>character</td>
+<td>Per-subject label: <code>&quot;Corrected&quot;</code> (the subject has ≥1
+child value with <code>corr_val == &quot;Corrected&quot;</code>),
+<code>&quot;Uncorrected&quot;</code>, or <code>&quot;Adult&quot;</code>. Constant within
+<code>subjid</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="b.-recenter_detail-when-recenter_detail-true-or-full_detail-true" class="section level2">
+<h2>5b. <code>recenter_detail</code> (when
+<code>recenter_detail = TRUE</code> or
+<code>full_detail = TRUE</code>)</h2>
+<p><strong>Specialized output for a related tool in
+development.</strong> The recentered CSD z-scores that the child
+algorithm cleans on. These three columns are a subset of what
+<code>debug</code> also surfaces (§7a). Child rows only — adult rows are
+<code>NA</code> for all three.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tbc.sd</code></td>
+<td>numeric</td>
+<td>Recentered uncorrected z: <code>sd.orig</code> minus
+<code>rcmedian.sd</code>. Primary z-score for most cleaning steps.</td>
+</tr>
+<tr class="even">
+<td><code>ctbc.sd</code></td>
+<td>numeric</td>
+<td>Recentered GA-corrected z: <code>sd.corr</code> minus
+<code>rcmedian.sd</code>. Equals <code>tbc.sd</code> whenever
+<code>sd.corr == sd.orig</code> (non-<code>potcorr</code> and reverted
+<code>potcorr</code> subjects).</td>
+</tr>
+<tr class="odd">
+<td><code>rcmedian.sd</code></td>
+<td>numeric</td>
+<td>The per-row recentering median subtracted to form
+<code>tbc.sd</code>/<code>ctbc.sd</code>, looked up by
+<code>(param, sex, agedays)</code> from the recentering medians in
+effect (the built-in reference, a user-supplied <code>sd.recenter</code>
+table, or zeros under <code>sd.recenter = &quot;none&quot;</code>).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="c.-qm_detail-when-qm_detail-true" class="section level2">
+<h2>5c. <code>qm_detail</code> (when <code>qm_detail = TRUE</code>)</h2>
+<p><em>For a related package in development — not used in
+cleaning.</em></p>
+<p>Per-step <strong>eligibility flags</strong> for the child cleaning
+steps: ten logical columns, one per reported step, each
+<code>TRUE</code> where the row was <em>eligible for</em> (in scope of)
+that step — i.e. the denominator against which that step’s exclusions
+are measured. Intended for eligibility-normalized quality measures: a
+step’s exclusion rate is
+<code>(rows that step excluded) / (rows eligible for that step)</code>,
+and a row’s <code>exclude_detailed</code> code already identifies which
+step excluded it, so the numerator is derivable from these flags plus
+<code>exclude_detailed</code>. The flags are <strong>write-only</strong>
+— they record eligibility and never affect any exclusion decision. Child
+rows only; adult rows are <code>NA</code> for all ten. Typically
+requested together with <code>exclude_detail = TRUE</code>.</p>
+<p>Two denominator conventions are used, matching what each step
+measures. <strong>Prevalence</strong> steps count every valid value at
+the step’s entry (including values that structurally could not be
+excluded): CF, hard-limit, and extraneous. <strong>At-risk</strong>
+steps count only values the step can mechanically act on: the
+trajectory/EWMA steps, evil twins, abs-diff, and the trajectory-endgame
+steps.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Step</th>
+<th>Eligible rows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>qm_elig_c_cf</code></td>
+<td>CF rescue (Child Step 6)</td>
+<td>prevalence: all valid values at step entry</td>
+</tr>
+<tr class="even">
+<td><code>qm_elig_c_hardlimit</code></td>
+<td>Hard-limit / PIV (Child Step 7)</td>
+<td>prevalence: all valid values at step entry</td>
+</tr>
+<tr class="odd">
+<td><code>qm_elig_extraneous</code></td>
+<td>Same-day extraneous (Child Step 13)</td>
+<td>prevalence: all valid values at step entry (single-day values
+included)</td>
+</tr>
+<tr class="even">
+<td><code>qm_elig_c_eviltwins</code></td>
+<td>Evil Twins (Child Step 9)</td>
+<td>at-risk: subject-params with &gt;= 4 eligible values</td>
+</tr>
+<tr class="odd">
+<td><code>qm_elig_c_trajextreme</code></td>
+<td>Extreme EWMA (Child Step 11)</td>
+<td>at-risk: subject-params with &gt;= 3 Include values (temp
+same-day-extraneous rows included — Step 11’s per-pass temp-SDE recalc
+can promote one to Include, after which a later iteration can exclude it
+as Traj-Extreme)</td>
+</tr>
+<tr class="even">
+<td><code>qm_elig_c_traj</code></td>
+<td>Moderate EWMA (Child Steps 15/16)</td>
+<td>at-risk: subject-params with &gt;= 3 Include values (non-birth Step
+15 and birth HT/HC Step 16 combined)</td>
+</tr>
+<tr class="odd">
+<td><code>qm_elig_c_absdiff</code></td>
+<td>Abs-diff (Child Step 17)</td>
+<td>at-risk: HT/HC values in subject-params with &gt;= 2 rows</td>
+</tr>
+<tr class="even">
+<td><code>qm_elig_c_pair</code></td>
+<td>Pair (Child Step 19)</td>
+<td>at-risk: both values of subject-params with exactly 2 remaining
+Includes</td>
+</tr>
+<tr class="odd">
+<td><code>qm_elig_c_single</code></td>
+<td>Single (Child Step 19)</td>
+<td>at-risk: values that reached the single-value rule (entered with 1
+Include, or a 2-Include pair reduced to 1 by the pair rule)</td>
+</tr>
+<tr class="even">
+<td><code>qm_elig_c_trajuneval</code></td>
+<td>Unevaluable / error load (Child Step 21)</td>
+<td>at-risk: Include values in subject-params with at least the
+error-load minimum count of errors</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="display_gc_id-when-display_gc_id-true-or-full_detail-true" class="section level2">
+<h2>6. <code>display_gc_id</code> (when
+<code>display_gc_id = TRUE</code> or
+<code>full_detail = TRUE</code>)</h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>gc_internal_id</code></td>
+<td>integer or as supplied</td>
+<td>The id growthcleanr actually used internally: equal to the user’s
+<code>id</code> when it was valid (no regen needed), or the
+auto-generated sequential <code>1:N</code> (in input row order) when the
+user’s <code>id</code> was absent / <code>NULL</code> / <code>NA</code>
+/ non-unique and gc had to regenerate. Companion to the standard
+<code>id</code> column (§1): <code>id</code> preserves whatever the user
+supplied (even if invalid), <code>gc_internal_id</code> exposes the key
+gc used. Recommended whenever the input <code>id</code> may not be a
+clean unique per-row identifier. For semi-wide or wide input returned as
+long output, <code>gc_internal_id</code> is always returned (no switch
+needed): it is growthcleanr’s per-measurement number, and your id, if
+any, comes back under its own column name (§1).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="b.-internal_detail-when-internal_detail-true-or-full_detail-true" class="section level2">
+<h2>6b. <code>internal_detail</code> (when
+<code>internal_detail = TRUE</code> or
+<code>full_detail = TRUE</code>)</h2>
+<p>growthcleanr’s own working values for the key inputs the user
+supplied. The primary <code>param</code>, <code>measurement</code>,
+<code>agedays</code>, <code>sex</code>, and <code>id</code> columns
+always return the <strong>verbatim submission</strong> – growthcleanr
+never alters or drops an input value – so these columns are the only
+view of what the algorithm actually ran on.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>gc_internal_meas</code></td>
+<td>numeric</td>
+<td>The measurement growthcleanr worked from: HEIGHTIN / LENGTHIN /
+HEADIN x 2.54, WEIGHTLBS / 2.2046226. Equals <code>measurement</code>
+when no unit conversion applied. The 0.7 cm recumbent/standing offset
+(<code>length.adjust</code>, and the default gestational-age window) is
+applied only where a value is z-scored, so it is not reflected here; see
+<code>vignette(&quot;wrapper&quot;)</code>, Phase 8. The imperial conversion is
+reflected for every row (the adult algorithm applies the same factors);
+the LENGTHCM relabel applies at every age (adult length is cleaned as
+height).</td>
+</tr>
+<tr class="even">
+<td><code>gc_internal_param</code></td>
+<td>character</td>
+<td>The parameter label that goes with <code>gc_internal_meas</code>,
+after the imperial conversion and the LENGTHCM relabel (every age).
+Reading <code>gc_internal_meas</code> without it is a units trap.</td>
+</tr>
+<tr class="odd">
+<td><code>gc_internal_sex</code></td>
+<td>integer</td>
+<td>The coerced sex the algorithm used (see 7c).</td>
+</tr>
+<tr class="even">
+<td><code>gc_internal_id</code></td>
+<td>integer or as supplied</td>
+<td>The id growthcleanr used internally (see 6).</td>
+</tr>
+<tr class="odd">
+<td><code>gc_internal_agedays</code></td>
+<td>integer</td>
+<td>The whole-day age growthcleanr cleaned on. Equals
+<code>agedays</code> unless a fractional age was submitted, which is
+rounded down (1435.4 is cleaned as 1435; -0.5 as -1, a negative age, set
+aside). Also returned without a switch when
+<code>age_source = &quot;dates&quot;</code> is used with an age column present: it
+then holds the ages computed from the dates, and <code>agedays</code>
+holds your own column.</td>
+</tr>
+<tr class="even">
+<td><code>gc_internal_dob</code></td>
+<td><code>Date</code></td>
+<td>The date-of-birth growthcleanr parsed, showing the interpretation it
+used — including the four-digit year it resolved. Present whenever a
+<code>dob</code> column was supplied, whether or not the dates drove
+<code>agedays</code> (on the date route,
+<code>agedays = floor(gc_internal_visit_date - gc_internal_dob)</code>).
+Lets you audit how a non-ISO or ambiguous-order date was read.</td>
+</tr>
+<tr class="odd">
+<td><code>gc_internal_visit_date</code></td>
+<td><code>Date</code></td>
+<td>The parsed visit date. Present whenever a <code>visit_date</code>
+column was supplied — including alongside an <code>agedays</code> column
+that drives the run (e.g. supplying <code>agedays</code> +
+<code>visit_date</code> to get the parsed visit date back). Independent
+of <code>gc_internal_dob</code>: a lone <code>visit_date</code> yields
+only this column.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="c.-mean_ht-returned-by-default-when-the-data-has-adult-rows" class="section level2">
+<h2>6c. <code>mean_ht</code> (returned by default when the data has
+adult rows)</h2>
+<p>The value is always computed by the adult algorithm; this switch
+controls only whether it is returned. By default the column is returned
+when any row is at or above <code>adult_cutpoint</code> and omitted
+otherwise, so child-only output has no empty column. Set
+<code>mean_ht = TRUE</code> to always return it or
+<code>mean_ht = FALSE</code> to omit it. It is returned in long output.
+For semi-wide or wide output, name it in <code>widened_emit</code> to
+add it beside the height values.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>mean_ht</code></td>
+<td>numeric</td>
+<td><strong>Adult algorithm only.</strong> The mean height (cm) computed
+in Adult Step 11H. The <code>mean_ht</code> column can be used by
+researchers who want a consistent height for evaluation of body mass
+index. Computed <strong>only from the subject’s finally-included
+heights</strong>. Within a validated height group, all of a subject’s
+height rows in that group share the group mean; otherwise it is the mean
+of the subject’s included heights (see
+<code>vignette(&quot;adult-algorithm&quot;)</code>). <strong>Populated on every
+adult height row of the subject, including excluded rows</strong>: an
+excluded row (or one with a missing measurement) takes the value of the
+included height nearest in age (ties go to the earlier one).
+<code>NA</code> for child rows, adult weight rows, and every height row
+of a subject with no included adult height.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="debug-when-debug-true-or-full_detail-true" class="section level2">
+<h2>7. <code>debug</code> (when <code>debug = TRUE</code> or
+<code>full_detail = TRUE</code>)</h2>
+<p>Intermediate diagnostic columns retained for threshold refinement and
+development; not intended for routine use. The z-score columns (§7a–7b)
+are child-only — adult rows are <code>NA</code> for them — but
+<code>gc_internal_sex</code> (§7c) applies to all rows. The columns
+below are the current set.</p>
+<div id="a.-csd-z-scores" class="section level3">
+<h3>7a. CSD z-scores</h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sd.orig</code></td>
+<td>numeric</td>
+<td>Raw CSD z-score from the WHO/CDC age-blend, computed at
+preprocessing on the entered value plus any recumbent/standing offset.
+GA correction lives in <code>sd.corr</code>; Child Step 2b changes
+<code>sd.orig</code> only for gestational-age-window height rows under
+the default, which it rescores 0.7 cm lower
+(<code>vignette(&quot;wrapper&quot;)</code>, Phase 8, fact 6).</td>
+</tr>
+<tr class="even">
+<td><code>sd.corr</code></td>
+<td>numeric</td>
+<td>GA-corrected raw CSD z-score (Child Step 2b). For
+non-<code>potcorr</code> subjects, equals <code>sd.orig</code>. For
+<code>potcorr</code> subjects, initially set to a
+gestational-age-corrected z-score via
+<code>.compute_corrected_z()</code>; then <strong>reverted to
+<code>sd.orig</code></strong> for the subset whose correction is not
+corroborated (neither a consistent early-weight trajectory nor a low
+same-day height) — so not every <code>potcorr</code> subject ends with a
+correction.</td>
+</tr>
+<tr class="odd">
+<td><code>tbc.sd</code></td>
+<td>numeric</td>
+<td>Recentered uncorrected z: <code>sd.orig</code> minus the
+population-median recentering offset. Primary z-score for most cleaning
+steps.</td>
+</tr>
+<tr class="even">
+<td><code>ctbc.sd</code></td>
+<td>numeric</td>
+<td>Recentered GA-corrected z: <code>sd.corr</code> minus the same
+recentering offset. Equal to <code>tbc.sd</code> whenever
+<code>sd.corr == sd.orig</code> (non-<code>potcorr</code> subjects and
+reverted <code>potcorr</code> subjects).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="b.-plusminus-perturbation-z-scores" class="section level3">
+<h3>7b. Plus/minus perturbation z-scores</h3>
+<p>Recentered z-scores recomputed under a ±5%-of-weight (WT) or ±1 cm
+(HT/HC) perturbation, used by some trajectory steps to test sensitivity
+at recorded precision.</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tbc.p_plus</code></td>
+<td>numeric</td>
+<td>Recentered uncorrected z under the <code>+</code> perturbation.</td>
+</tr>
+<tr class="even">
+<td><code>tbc.p_minus</code></td>
+<td>numeric</td>
+<td>Recentered uncorrected z under the <code>−</code> perturbation.</td>
+</tr>
+<tr class="odd">
+<td><code>ctbc.p_plus</code></td>
+<td>numeric</td>
+<td>Recentered GA-corrected z under the <code>+</code> perturbation.
+Equal to <code>tbc.p_plus</code> for uncorrected values.</td>
+</tr>
+<tr class="even">
+<td><code>ctbc.p_minus</code></td>
+<td>numeric</td>
+<td>Recentered GA-corrected z under the <code>−</code> perturbation.
+Equal to <code>tbc.p_minus</code> for uncorrected values.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="c.-gc_internal_sex-gcs-interpreted-sex" class="section level3">
+<h3>7c. <code>gc_internal_sex</code> — gc’s interpreted sex</h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>gc_internal_sex</code></td>
+<td>integer</td>
+<td>The sex value gc actually used internally: <code>0</code> (male),
+<code>1</code> (female), or <code>NA</code> (uninterpretable). Companion
+to the standard <code>sex</code> column (§1), which carries the user’s
+<strong>verbatim</strong> submission: <code>sex</code> preserves what
+was submitted, <code>gc_internal_sex</code> exposes the coerced value
+the algorithm ran on. Present under <code>internal_detail</code>,
+<code>debug</code>, or <code>full_detail</code>. (Adult and child alike
+— the coercion is shared.)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="quick-map-option-columns-added" class="section level2">
+<h2>Quick map: option → columns added</h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Option (default)</th>
+<th>Columns added</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(always)</td>
+<td><code>id</code>, <code>subjid</code>, <code>param</code>,
+<code>agedays</code>, <code>sex</code>, <code>measurement</code>,
+<code>exclude</code>, <code>bin_exclude</code></td>
+<td>8 columns. <code>exclude</code> carries the Summary code.</td>
+</tr>
+<tr class="even">
+<td><code>carry_through = TRUE</code> <em>(default)</em></td>
+<td>any other input columns</td>
+<td>Any other input columns (anything not used as <code>subjid</code>,
+<code>param</code>, <code>agedays</code>, <code>sex</code>,
+<code>measurement</code>, or <code>id</code>, including
+<code>dob</code>/<code>visit_date</code>) are returned unchanged, after
+the growthcleanr columns. For semi-wide/wide input with long output,
+each row’s columns are repeated on every measurement from that row
+(wide: subject-level columns such as <code>dob</code>; the per-block
+columns are not repeated). A column whose name matches a column
+growthcleanr returns in this run (e.g. <code>exclude</code>) comes back
+as <code>userinput_&lt;name&gt;</code>, with a warning; names of
+growthcleanr columns that are not returned in the run are left alone.
+Set <code>carry_through = FALSE</code> to return only the growthcleanr
+columns.</td>
+</tr>
+<tr class="odd">
+<td><code>unit_error_range = TRUE</code> <em>(default)</em></td>
+<td><code>unit_error_range</code></td>
+<td>Set <code>FALSE</code> to omit. Not part of
+<code>full_detail</code>.</td>
+</tr>
+<tr class="even">
+<td><code>exclude_detail = TRUE</code></td>
+<td><code>exclude_detailed</code></td>
+<td>Step-level Detailed code.</td>
+</tr>
+<tr class="odd">
+<td><code>internal_detail = TRUE</code></td>
+<td><code>gc_internal_meas</code>, <code>gc_internal_param</code>,
+<code>gc_internal_sex</code>, <code>gc_internal_id</code>,
+<code>gc_internal_agedays</code>, and <code>gc_internal_dob</code> /
+<code>gc_internal_visit_date</code> when a <code>dob</code> /
+<code>visit_date</code> column was supplied (each independently, whether
+or not the dates drove <code>agedays</code>)</td>
+<td>gc’s working values for the inputs the user supplied; the primary
+columns stay verbatim.</td>
+</tr>
+<tr class="even">
+<td><code>tri_exclude = TRUE</code></td>
+<td><code>tri_exclude</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>cf_detail = TRUE</code></td>
+<td><code>cf_status</code>, <code>cf_deltaz</code>,
+<code>cf_nextz</code>, <code>imperial</code>, <code>cf_dage_orig</code>,
+<code>cf_dage_next</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>corr_detail = TRUE</code></td>
+<td><code>corr_val</code>, <code>corr_pt</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>recenter_detail = TRUE</code></td>
+<td><code>tbc.sd</code>, <code>ctbc.sd</code>,
+<code>rcmedian.sd</code></td>
+<td>Child rows only (<code>NA</code> on adult). Stable output contract
+(subset of the debug z-scores).</td>
+</tr>
+<tr class="even">
+<td><code>qm_detail = TRUE</code></td>
+<td><code>qm_elig_c_cf</code>, <code>qm_elig_c_hardlimit</code>,
+<code>qm_elig_c_eviltwins</code>, <code>qm_elig_c_trajextreme</code>,
+<code>qm_elig_extraneous</code>, <code>qm_elig_c_traj</code>,
+<code>qm_elig_c_absdiff</code>, <code>qm_elig_c_pair</code>,
+<code>qm_elig_c_single</code>, <code>qm_elig_c_trajuneval</code></td>
+<td>Per-step eligibility flags (child rows only; <code>NA</code> on
+adult). Write-only; do not affect any exclusion.</td>
+</tr>
+<tr class="odd">
+<td><code>display_gc_id = TRUE</code></td>
+<td><code>gc_internal_id</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><em>(default, when the data has adult rows)</em> or
+<code>mean_ht = TRUE</code></td>
+<td><code>mean_ht</code></td>
+<td>Adult height rows only (<code>NA</code> elsewhere; computed from
+included heights, populated on excluded rows too). Value always
+computed; switch controls only whether it is returned.</td>
+</tr>
+<tr class="odd">
+<td><code>debug = TRUE</code></td>
+<td><code>gc_internal_sex</code> + <code>sd.orig</code>,
+<code>sd.corr</code>, <code>tbc.sd</code>, <code>ctbc.sd</code>,
+<code>tbc.p_plus</code>, <code>tbc.p_minus</code>,
+<code>ctbc.p_plus</code>, <code>ctbc.p_minus</code></td>
+<td>z-score columns are child rows only (<code>NA</code> on adult);
+<code>gc_internal_sex</code> applies to all rows.</td>
+</tr>
+<tr class="even">
+<td><code>full_detail = TRUE</code></td>
+<td><code>exclude_detailed</code> + <code>tri_exclude</code> +
+<code>cf_status</code>, <code>cf_deltaz</code>, <code>cf_nextz</code>,
+<code>imperial</code>, <code>cf_dage_orig</code>,
+<code>cf_dage_next</code> + <code>corr_val</code>, <code>corr_pt</code>
++ <code>tbc.sd</code>, <code>ctbc.sd</code>, <code>rcmedian.sd</code> +
+<code>gc_internal_id</code> + <code>gc_internal_meas</code>,
+<code>gc_internal_param</code>, <code>gc_internal_agedays</code> (+
+<code>gc_internal_dob</code> / <code>gc_internal_visit_date</code> when
+supplied) + <code>mean_ht</code> + the debug set
+(incl. <code>gc_internal_sex</code>)</td>
+<td>Convenience switch for <code>exclude_detail</code> +
+<code>cf_detail</code> + <code>corr_detail</code> +
+<code>recenter_detail</code> + <code>debug</code> +
+<code>tri_exclude</code> + <code>display_gc_id</code> +
+<code>internal_detail</code> + <code>mean_ht</code>. Does
+<strong>not</strong> enable <code>qm_detail</code> (the ten
+<code>qm_elig_*</code> columns must be requested explicitly), and does
+<strong>not</strong> affect <code>unit_error_range</code> (independent
+default-on).</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

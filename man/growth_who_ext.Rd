@@ -2,12 +2,13 @@
 % Please edit documentation in R/extdata.R
 \name{growth_who_ext}
 \alias{growth_who_ext}
-\title{WHO Growth Percentile Table}
+\title{WHO Growth Reference Table}
 \description{
 Part of default WHO-derived tables
 }
 \details{
-Contains percentiles for various ages, gender, and weights, pre-calculated by WHO
+Contains WHO LMS parameters and CSD values for weight, height, head
+circumference, and BMI, by age in days (0 to 5 years) and sex.
 }
 \section{growthfile_who.csv.gz}{
 

@@ -2,12 +2,13 @@
 % Please edit documentation in R/extdata.R
 \name{rc-reference-medians}
 \alias{rc-reference-medians}
-\title{Infants reference medians}
+\title{Recentering reference medians}
 \description{
-Contains reference median values for default recentering in the infants
-algorithm
+Contains reference median z-scores (column rcmedian.sd) by age in days, sex,
+and param, used for the default recentering in the child algorithm
+(sd.recenter = NA). See vignette("recentering").
 }
-\section{rcfile-2023-08-15_format.csv.gz}{
+\section{rcfile-resmoothed.csv.gz}{
 
 
 Used in function \code{cleangrowth()}

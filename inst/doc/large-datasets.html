@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2026-11-08" />
+
+<title>Large datasets: parallel and checkpointing</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Large datasets: parallel and
+checkpointing</h1>
+<h4 class="date">2026-11-08</h4>
+
+
+
+<p>growthcleanr has two options that matter most on large datasets:</p>
+<ul>
+<li><strong>parallel</strong> – spread the work across several CPU cores
+so the run finishes faster.</li>
+<li><strong>checkpointing</strong> – clean the subjects in checkpoints
+and write each finished checkpoint to disk, so only one checkpoint is
+being cleaned in memory at a time. (The full input and the combined
+result are still held in memory.) This is <strong>on by
+default</strong>, and on a large dataset it both speeds the run up and
+keeps it from running out of memory.</li>
+</ul>
+<p>growthcleanr 2.x’s <code>splitinput()</code> and split-file workflow
+were removed; checkpointing replaces them.</p>
+<p>You can use either one on its own or both together. Neither one
+changes your results: growthcleanr cleans each subject independently of
+every other subject, so running in parallel, in checkpoints, or all at
+once in memory produces the same output.</p>
+<p>For the everyday copy-and-paste scripts, see
+<code>vignette(&quot;example-scripts&quot;)</code>. The scripts below assume your
+data is already in that standard format.</p>
+<div id="checkpointing-is-automatic" class="section level1">
+<h1>Checkpointing is automatic</h1>
+<p>For most people this needs no attention: <strong>checkpointing is on
+by default and cleans up after itself.</strong></p>
+<p>Here is what it does and why it helps. For some steps of the
+algorithm, memory use rises nonlinearly as the dataset size increases. A
+big run in a single block gets slow out of proportion to its size, and a
+large enough one runs out of memory and fails. Cleaning in checkpoints
+keeps the amount of data in memory at any moment bounded, which turns a
+steep curve into a roughly steady rate. With checkpointing, runtime for
+growthcleanr scales more linearly with dataset size. So on large
+datasets checkpointing is a speed and reliability feature, not just a
+way to resume. (Note that many things influence runtime beyond the
+number of observations in a dataset, such as how many values are
+excluded and in which steps.)</p>
+<p>By default:</p>
+<ul>
+<li>Checkpointing <strong>engages on its own only when a dataset is
+large enough to benefit</strong> – more than
+<code>checkpoint_size</code> subjects (5000 by default). Smaller and
+typical datasets fit comfortably in memory, so growthcleanr runs them in
+memory and <strong>writes nothing to disk</strong>.</li>
+<li>When it does engage, the checkpoint files go to a <strong>temporary
+folder that is deleted automatically</strong> – growthcleanr removes
+them when the run ends, including when it stops with an error or you
+interrupt it. You do not choose or manage a location. If R itself
+crashes or is killed (for example by running out of memory), R cannot
+delete its temporary folder, so the checkpoint files remain in your
+system’s temporary directory until you delete them or your operating
+system clears that directory.</li>
+</ul>
+</div>
+<div id="keeping-the-checkpoint-files-and-resuming" class="section level1">
+<h1>Keeping the checkpoint files (and resuming)</h1>
+<p>If you want the checkpoint files kept at a location you choose – so
+that an interrupted run can <strong>resume</strong> where it stopped, or
+so you can inspect them – give <code>checkpoint_dir</code> the name of a
+folder. growthcleanr writes each checkpoint’s result to a file in that
+folder and combines them at the end. The folder is created if it does
+not exist.</p>
+<p>Use a <strong>new, empty folder for each dataset or run.</strong> If
+a run is interrupted, re-run the same script with
+<code>checkpoint_resume = TRUE</code>; growthcleanr skips the
+checkpoints that already finished and picks up where it stopped. If the
+data has changed since the checkpoint files were written, any rows not
+found in them are returned with <code>exclude = NA</code> and a warning;
+if the change was not intentional, rerun with
+<code>checkpoint_resume = FALSE</code> to clean every row.</p>
+<ul>
+<li><code>checkpoint_size</code> – how many subjects go in each saved
+file (default 5000). You can usually leave this alone.</li>
+<li><code>keep_checkpoints</code> – after a run finishes,
+<code>TRUE</code> (the default when you set <code>checkpoint_dir</code>)
+leaves the files in the folder; set <code>FALSE</code> to delete them
+once the combined result is returned.</li>
+</ul>
+<details>
+<summary>
+<strong>Checkpoint to a folder you keep</strong>
+</summary>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  df,</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">checkpoint_dir  =</span> <span class="st">&quot;gc_checkpoints&quot;</span>,  <span class="co"># a NEW, empty folder just for this run</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">checkpoint_size =</span> <span class="dv">5000</span>               <span class="co"># subjects saved per file (default; usually leave as is)</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Resume a run that was interrupted</strong>
+</summary>
+<p>Re-run the same script, adding <code>checkpoint_resume = TRUE</code>.
+Use the same folder, the same data, the same
+<code>checkpoint_size</code>, and the same other
+<code>cleangrowth()</code> arguments (for example
+<code>cf_rescue</code>, <code>adult_permissiveness</code>,
+<code>adult_cutpoint</code>, and output options) as the original run.
+growthcleanr does not check these; a mismatch silently mixes results
+from different settings.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  df,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">checkpoint_dir    =</span> <span class="st">&quot;gc_checkpoints&quot;</span>,  <span class="co"># the SAME folder as the interrupted run</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="at">checkpoint_resume =</span> <span class="cn">TRUE</span>               <span class="co"># skip the checkpoints that already finished</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+</div>
+<div id="turning-checkpointing-off" class="section level1">
+<h1>Turning checkpointing off</h1>
+<p>Set <code>checkpoint = FALSE</code> to disable checkpointing
+entirely. growthcleanr then runs the whole dataset in memory and
+<strong>never writes any intermediate data to disk.</strong> Use this
+when your environment must not write data to disk at all. On a very
+large dataset this can be slow, or run out of memory – which is exactly
+what checkpointing exists to prevent – so reserve it for when writing to
+disk is not acceptable.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(df, <span class="at">checkpoint =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><code>checkpoint = FALSE</code> takes precedence: if you set it and
+also pass a <code>checkpoint_dir</code>, the directory is ignored and
+nothing is written (with a warning).</p>
+</div>
+<div id="where-your-data-is-written" class="section level1">
+<h1>Where your data is written</h1>
+<p>Because the checkpoint files hold your data, it is worth knowing
+where they go:</p>
+<ul>
+<li><strong>Default (ephemeral).</strong> Files go to your R session’s
+temporary folder and are deleted automatically when the run finishes.
+They are not kept, and small runs write nothing at all. (If R crashes or
+is killed mid-run, see the note under <em>Checkpointing is
+automatic</em> above.)</li>
+<li><strong><code>checkpoint_dir</code> (kept).</strong> Files go to the
+folder you name and stay there after the run so you can resume or
+inspect them. You chose the location, so you know where your data is;
+remember the files persist until you delete them (or set
+<code>keep_checkpoints = FALSE</code>). The files hold identifiers and
+measurements, so put the folder somewhere appropriate for your data and
+avoid cloud-synced folders for data that should stay secure.</li>
+<li><strong><code>checkpoint = FALSE</code> (nothing on disk).</strong>
+No intermediate data is written anywhere.</li>
+</ul>
+<p><strong>One note for very large datasets on Linux.</strong> On most
+systems the temporary folder is on disk, so the default is fine. On some
+Linux systems the temporary folder is a RAM disk (for example
+<code>/tmp</code> mounted as <code>tmpfs</code>). There, the temporary
+checkpoint files count against memory, which cancels the memory savings
+on a very large dataset. If you are on such a system and cleaning a very
+large dataset, set <code>checkpoint_dir</code> to a folder on a real
+disk. macOS and Windows use disk-backed temporary folders by default, so
+no action is needed there.</p>
+</div>
+<div id="running-in-parallel" class="section level1">
+<h1>Running in parallel</h1>
+<p>Set <code>parallel = TRUE</code>. By default growthcleanr chooses the
+number of worker cores for you:
+<code>min(8, number of cores on your machine - 1)</code>. It caps at 8
+because more workers than that tend to cost more in setup than they
+save. On a shared server or a scheduled cluster job, set
+<code>cores</code> to the number of cores you were allocated; automatic
+detection counts every core on the machine.</p>
+<p>To pin the number yourself, set <code>cores</code> to a whole number.
+Leaving one core free (the default behavior) keeps your computer
+responsive during the run. A value larger than the number of cores on
+your machine is reduced to that number (extra workers only compete for
+the same cores). <code>cores</code> is ignored when
+<code>parallel = FALSE</code>.</p>
+<details>
+<summary>
+<strong>Run in parallel</strong>
+</summary>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  df,</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="cn">TRUE</span>,   <span class="co"># use several CPU cores</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="at">cores    =</span> <span class="cn">NULL</span>    <span class="co"># NULL auto-detects (up to 8); or set a number like 4</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+</div>
+<div id="doing-both-recommended-for-very-large-datasets" class="section level1">
+<h1>Doing both (recommended for very large datasets)</h1>
+<p>Parallel and checkpointing work together: the run is both faster and,
+if you keep the checkpoint files with <code>checkpoint_dir</code>,
+resumable.</p>
+<details>
+<summary>
+<strong>Run in parallel and keep resumable checkpoints</strong>
+</summary>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  df,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">parallel          =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="at">checkpoint_dir    =</span> <span class="st">&quot;gc_checkpoints&quot;</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="at">checkpoint_resume =</span> <span class="cn">FALSE</span>   <span class="co"># set TRUE only when resuming an interrupted run</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>)</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+</div>
+<div id="a-few-tips" class="section level1">
+<h1>A few tips</h1>
+<ul>
+<li><strong>Results do not change.</strong> With or without parallel or
+checkpointing, each subject is cleaned independently, so the output is
+the same.</li>
+<li><strong>You usually do not have to do anything.</strong>
+Checkpointing is automatic on large data and cleans up after itself;
+reach for <code>checkpoint_dir</code> only when you want the files kept
+for resuming, and for <code>checkpoint = FALSE</code> only when nothing
+may be written to disk.</li>
+<li><strong>One folder per dataset or run.</strong> Without
+<code>checkpoint_resume = TRUE</code>, a run deletes the checkpoint
+files already in the folder; with it, files from a different dataset can
+give wrong results. It is best practice to start each run with its own
+empty folder unless consciously using prior checkpoints.</li>
+<li><strong>Estimate run time before a very large run (if
+desired).</strong> Clean a random sample of subjects corresponding to
+the checkpoint size you plan to use with the arguments you plan to use
+(including <code>parallel</code> and <code>cores</code>), and time the
+run. With checkpointing, run time grows roughly in proportion to the
+number of subjects, so scale the sample time by the ratio of subjects;
+allow extra time at the end for combining the checkpoint files.</li>
+<li><strong>Watch progress.</strong> Progress and a cleaning summary
+print by default as the run proceeds (they also name the checkpoint
+location a run is using); set <code>quietly = TRUE</code> to silence
+them.</li>
+<li><strong>Advanced use.</strong> You can also recombine a kept
+checkpoint folder yourself with
+<code>cleangrowth_checkpoint_combine()</code>
+(<code>cleangrowth_checkpoint()</code> is deprecated; use
+<code>cleangrowth(checkpoint_dir = ...)</code>); see
+<code>vignette(&quot;wrapper&quot;)</code> for how checkpointing works
+internally.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

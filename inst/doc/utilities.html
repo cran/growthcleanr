@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2026-11-08" />
+
+<title>Utility functions</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Utility functions</h1>
+<h4 class="date">2026-11-08</h4>
+
+
+
+<p>Technical reference for the public utility functions in
+<code>utils.R</code> (<code>recode_sex()</code>,
+<code>longwide()</code>, <code>simple_bmi()</code>) and the extended
+BMIz functions in <code>cdc.R</code> (<code>ext_bmiz()</code> and its
+internal helpers <code>z_score()</code> and
+<code>set_cols_first()</code>).</p>
+<p>This document describes what the current R code does in the utility
+and extended-BMIz functions. It is intended as a debugging aid and a
+long-term technical reference. References to code use function names
+rather than line numbers, because line numbers become stale with each
+code edit.</p>
+<hr />
+<div id="how-to-read-this-document" class="section level2">
+<h2>How to Read This Document</h2>
+<p>These functions sit <strong>outside</strong> the cleaning algorithm.
+They do not assign exclusion codes and are never called by
+<code>cleangrowth()</code>, <code>cleanchild()</code>, or
+<code>cleanadult()</code>. They are user-facing helpers for the steps
+that come after cleaning: reshaping <code>cleangrowth()</code> output,
+and computing extended CDC BMI metrics on the cleaned data.</p>
+<p>The algorithm vignettes cover the cleaning pipeline itself. This
+vignette covers the surrounding toolchain.</p>
+<hr />
+</div>
+<div id="scope-and-the-post-cleaning-pipeline" class="section level2">
+<h2>Scope and the post-cleaning pipeline</h2>
+<p>The three utility functions plus <code>ext_bmiz()</code> form a
+natural workflow that takes cleaned long-format data through to extended
+BMI z-scores:</p>
+<pre><code>cleangrowth() output → longwide()      → wide ht/wt rows, filtered by exclusion code
+                       simple_bmi()     → adds bmi column
+                       ext_bmiz()       → extended + LMS BMIz, BMIp, sigma, etc.</code></pre>
+<p><code>cleangrowth()</code> returns sex exactly as submitted
+(e.g. <code>M</code>/<code>F</code> or <code>0</code>/<code>1</code>).
+<code>longwide()</code> recodes it to <code>M</code>/<code>F</code>,
+reading the submitted codes the same way <code>cleangrowth()</code> does
+(the default recognized codes, or the <code>sex_coding</code> you pass),
+and <code>ext_bmiz()</code> reads <code>M</code>/<code>F</code>
+directly, so callers using the standard pipeline do not need to recode
+sex. <code>recode_sex()</code> is a standalone helper for recoding one
+explicit pair of codes to another.</p>
+<p>The functions accept either a <code>data.frame</code> or
+<code>data.table</code>. Several coerce to <code>data.table</code>
+internally for speed.</p>
+<hr />
+</div>
+<div id="recode_sex-utils.r" class="section level2">
+<h2><code>recode_sex()</code> (utils.R)</h2>
+<p><strong>Purpose.</strong> Recode a binary sex variable from one
+explicit pair of codes to another (e.g. 0/1 to
+<code>M</code>/<code>F</code> for <code>ext_bmiz()</code>, using
+<code>targetm = &quot;M&quot;</code> and <code>targetf = &quot;F&quot;</code>;
+<code>ext_bmiz()</code> reads only the column named <code>sex</code>, so
+use <code>targetcol = &quot;sex&quot;</code> for that). <code>longwide()</code> no
+longer uses it: it parses sex the way <code>cleangrowth()</code>
+does.</p>
+<p><strong>Signature.</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">recode_sex</span>(input_data,</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>           <span class="at">sourcecol =</span> <span class="st">&quot;sex&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>           <span class="at">sourcem   =</span> <span class="st">&quot;0&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>           <span class="at">sourcef   =</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>           <span class="at">targetcol =</span> <span class="st">&quot;sex_recoded&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>           <span class="at">targetm   =</span> <span class="dv">1</span><span class="dt">L</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>           <span class="at">targetf   =</span> <span class="dv">2</span><span class="dt">L</span>)</span></code></pre></div>
+<p><strong>Parameters.</strong> <code>sourcecol</code> is the existing
+sex column; <code>sourcem</code>/<code>sourcef</code> are the values it
+uses for male/female. <code>targetcol</code> is the column to write,
+which may be <code>sourcecol</code> itself;
+<code>targetm</code>/<code>targetf</code> are the values written for
+male/female. Defaults map <code>sex</code> 0/1 →
+<code>sex_recoded</code> 1/2.</p>
+<p><strong>Mechanics.</strong> Coerces to <code>data.table</code>,
+matches <code>sourcecol</code> against <code>sourcem</code> and
+<code>sourcef</code>, then writes <code>targetcol</code> from those
+matches: <code>targetm</code>, <code>targetf</code>, or <code>NA</code>
+for rows matching neither value.</p>
+<p><strong>Output.</strong> Returns a <code>data.table</code> with the
+added/updated <code>targetcol</code>. The input is not modified, and
+unless <code>targetcol</code> is <code>sourcecol</code> the source
+column is preserved, so the recode can be chained (e.g., recode back
+from text labels to numbers).</p>
+<hr />
+</div>
+<div id="longwide-utils.r" class="section level2">
+<h2><code>longwide()</code> (utils.R)</h2>
+<p><strong>Purpose.</strong> Transform long-format growthcleanr data
+(one row per measurement) into wide format (one row per subject-age with
+paired height and weight), filtered to the exclusion codes the caller
+wants to keep. This is the reshape step that prepares cleaned data for
+BMI computation.</p>
+<p><strong>Signature.</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">longwide</span>(long_df,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>         <span class="at">id                  =</span> <span class="st">&quot;id&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>         <span class="at">subjid              =</span> <span class="st">&quot;subjid&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>         <span class="at">sex                 =</span> <span class="st">&quot;sex&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>         <span class="at">agedays             =</span> <span class="st">&quot;agedays&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>         <span class="at">param               =</span> <span class="st">&quot;param&quot;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>         <span class="at">measurement         =</span> <span class="st">&quot;measurement&quot;</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>         <span class="at">gcr_result          =</span> <span class="st">&quot;exclude&quot;</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>         <span class="at">include_all         =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>         <span class="at">inclusion_types     =</span> <span class="fu">c</span>(<span class="st">&quot;Include&quot;</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>         <span class="at">extra_cols          =</span> <span class="cn">NULL</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>         <span class="at">keep_unmatched_data =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>         <span class="at">sex_coding          =</span> <span class="sc">&lt;</span><span class="fu">cleangrowth</span>() default codes<span class="sc">&gt;</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>         <span class="at">param_coding        =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<p><strong>Input expectations.</strong> A long data frame with the named
+id/subjid/sex/agedays/param/measurement columns plus an exclusion
+column. The <code>gcr_result</code> default is <code>&quot;exclude&quot;</code>,
+which matches the <code>cleangrowth()</code> output column from version
+3 onward — so a <code>cleangrowth()</code> result
+<code>data.table</code> can be passed (or merged onto the input)
+directly. For data with a differently named exclusion column, pass
+<code>gcr_result</code> explicitly. If the column is missing and the
+default <code>&quot;exclude&quot;</code> was used, the error suggests
+<code>gcr_result = &quot;gcr_result&quot;</code> (the column name 2.x scripts
+used).</p>
+<p><strong>Mechanics.</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Column check and renaming.</strong> Errors if any specified
+column (including <code>extra_cols</code>) is absent. The six required
+columns are read by the names passed in <code>id</code>,
+<code>subjid</code>, <code>sex</code>, <code>agedays</code>,
+<code>param</code> and <code>measurement</code> and renamed to those
+internal names, so a column that merely happens to be named, say,
+<code>subjid</code> is never read when <code>subjid = &quot;patid&quot;</code> is
+passed. <code>gcr_result</code> and <code>extra_cols</code> may not
+reuse a name <code>longwide()</code> needs (a required column, or an
+output column such as <code>agey</code> or <code>ht</code>); that is an
+error.</li>
+<li><strong>Inclusion filter.</strong> If
+<code>include_all = TRUE</code>, all rows are kept and
+<code>inclusion_types</code> is ignored. Otherwise only rows whose
+<code>gcr_result</code> is in <code>inclusion_types</code> (default
+<code>c(&quot;Include&quot;)</code>) are kept. An <code>inclusion_types</code>
+value that is not a version 3 exclusion code (Summary or Detailed, or a
+<code>bin_exclude</code>/<code>tri_exclude</code> value), such as the
+2.x code <code>&quot;Exclude-Carried-Forward&quot;</code>, matches nothing, so
+<code>longwide()</code> warns and points to the code mapping in
+<code>vignette(&quot;experienced-start-here&quot;)</code>.</li>
+<li><strong>Derived ages.</strong> Adds <code>agey</code>
+(<code>agedays / 365.25</code>, rounded to 4 places) and
+<code>agem</code> (<code>agey * 12</code>).</li>
+<li><strong>Sex recode.</strong> Parses <code>sex</code> with the same
+parser <code>cleangrowth()</code> uses — the default recognized codes
+(0/1, m/M, f/F, b/g, male/female, boy/girl; case- and
+whitespace-insensitive) or the user’s <code>sex_coding</code> list — and
+overwrites <code>sex</code> with <code>M</code> or <code>F</code>. A
+retained row whose sex is missing or unrecognized gets <code>NA</code>
+sex, and <code>longwide()</code> warns with the count and up to five
+unrecognized values (<code>ext_bmiz()</code> cannot compute BMIz for
+those rows). Pass the same <code>sex_coding</code> given to
+<code>cleangrowth()</code> if you used one, because
+<code>cleangrowth()</code> returns sex as entered, with no record of the
+coding. With the default coding, <code>longwide()</code> makes the same
+two checks as <code>cleangrowth()</code>, on the whole <code>sex</code>
+column before rows are filtered and at every age: it stops if the values
+are only 1 and 2 with at least one 2, and gives a prominent warning if
+every value is 1 across more than one subject. Passing
+<code>sex_coding</code> removes both.</li>
+<li><strong>Param and measurement.</strong> Reads <code>param</code> the
+way <code>cleangrowth()</code> does (its output returns
+<code>param</code> and <code>measurement</code> verbatim):
+<code>param_coding</code> labels resolve to a canonical parameter,
+imperial values are converted to metric
+(<code>HEIGHTIN</code>/<code>LENGTHIN</code> × 2.54,
+<code>WEIGHTLBS</code> ÷ 2.2046226), and <code>LENGTHCM</code> is
+treated as <code>HEIGHTCM</code> (label only; no length adjustment).
+Only height and weight rows are kept: head circumference is dropped
+silently, and a row with an unrecognized parameter is dropped with a
+warning naming up to five values. Pass the same
+<code>param_coding</code> given to <code>cleangrowth()</code> if you
+used one. So <code>ht</code> and <code>wt</code> in the output are
+always cm and kg.</li>
+<li><strong>Unique ids.</strong> The function requires <strong>unique
+<code>id</code>s</strong> among the kept height and weight rows and
+errors on duplicates.</li>
+<li><strong>Height/weight separation and re-merge.</strong> Height rows
+and weight rows with a non-missing measurement are split out, tagged
+with <code>ht_id</code>/<code>wt_id</code>, then merged on
+<code>subjid, agey, agem, agedays, sex</code>.
+<code>keep_unmatched_data</code> controls whether the merge is an inner
+join (default, <code>all = FALSE</code>) or a full outer join that
+retains heights without a same-day weight and vice versa. The merged
+measurements are exposed as <code>ht</code> and <code>wt</code>.</li>
+<li><strong><code>extra_cols</code> handling.</strong> For each extra
+column, the height-side (<code>.x</code>) and weight-side
+(<code>.y</code>) values are compared. If they match on every row
+(treating NA/NA as a match), a single merged column is kept. Otherwise
+the function keeps both as <code>ht_&lt;col&gt;</code> and
+<code>wt_&lt;col&gt;</code> plus a logical
+<code>match_&lt;col&gt;</code> column flagging where they agree.</li>
+<li>Drops the intermediate <code>HEIGHTCM</code>/<code>WEIGHTKG</code>
+columns (their values live in <code>ht</code>/<code>wt</code>) and gives
+the subject and age columns back the names passed as <code>subjid</code>
+and <code>agedays</code>.</li>
+</ol>
+<p><strong>Output.</strong> A wide data frame with one row per matched
+subject-age, carrying the subject column (under the name passed as
+<code>subjid</code>), the two ids,
+<code>agey</code>/<code>agem</code>/<code>agedays</code>, recoded
+<code>sex</code> (<code>M</code> or <code>F</code>), <code>ht</code>,
+<code>wt</code>, and any requested extra columns. Suitable for
+<code>simple_bmi()</code> then <code>ext_bmiz()</code>.</p>
+<p><strong>Notes / pitfalls.</strong></p>
+<ul>
+<li>The default inner join silently drops measurements without a
+same-day partner of the other parameter. Set
+<code>keep_unmatched_data = TRUE</code> to retain them.</li>
+<li>Duplicate <code>id</code>s are a hard error — the wide pivot depends
+on a unique per-row id.</li>
+<li>No optional packages are needed; <code>longwide()</code> uses base R
+only. If no rows are kept (or there are heights but no weights), it
+returns a data frame with the usual columns and no rows.</li>
+</ul>
+<hr />
+</div>
+<div id="simple_bmi-utils.r" class="section level2">
+<h2><code>simple_bmi()</code> (utils.R)</h2>
+<p><strong>Purpose.</strong> Add a BMI column to wide-format data using
+the standard formula. Intended for output from
+<code>longwide()</code>.</p>
+<p><strong>Signature.</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">simple_bmi</span>(wide_df, <span class="at">wtcol =</span> <span class="st">&quot;wt&quot;</span>, <span class="at">htcol =</span> <span class="st">&quot;ht&quot;</span>)</span></code></pre></div>
+<p><strong>Mechanics.</strong> Verifies <code>wtcol</code> and
+<code>htcol</code> are present (errors otherwise), coerces to
+<code>data.table</code> if needed, and computes
+<code>bmi := wt / (ht * 0.01)^2</code> — i.e., weight in kg over height
+in meters squared (height is supplied in cm, hence the <code>0.01</code>
+factor).</p>
+<p><strong>Output.</strong> The input as a <code>data.table</code> with
+an added <code>bmi</code> column.</p>
+<hr />
+</div>
+<div id="ext_bmiz-cdc.r" class="section level2">
+<h2><code>ext_bmiz()</code> (cdc.R)</h2>
+<p><strong>Purpose.</strong> Compute the <strong>extended</strong> BMI
+metrics defined by the CDC, alongside the standard LMS z-scores and
+percentiles, for children aged 2–19.9 years. The extended BMIz was
+introduced to better characterize BMI above the 95th percentile, where
+the original LMS distribution is compressed and poorly discriminates
+severe obesity. For BMI at or below the 95th percentile the extended
+values equal the LMS values; they diverge only above it.</p>
+<p>This function uses the R code published on the <a href="https://www.cdc.gov/growth-chart-training/hcp/computer-programs/index.html">CDC
+website</a> and the <a href="https://CRAN.R-project.org/package=cdcanthro">cdcanthro R
+package</a>. It is directly relevant to research comparing extended
+vs. original CDC BMIz. The extended BMI method is described in:</p>
+<blockquote>
+<p>Wei R, Ogden CL, Parsons VL, Freedman DS, Hales CM. A method for
+calculating BMI z-scores and percentiles above the 95th percentile of
+the CDC growth charts. <em>Ann Hum Biol.</em> 2020 Sep;47(6):514-521.
+doi: <a href="https://doi.org/10.1080/03014460.2020.1808065">10.1080/03014460.2020.1808065</a>.
+PMCID: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11232929/">PMC11232929</a>.</p>
+</blockquote>
+<p><strong>Signature.</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">ext_bmiz</span>(data,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>         <span class="at">age                =</span> <span class="st">&quot;agem&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>         <span class="at">wt                 =</span> <span class="st">&quot;wt&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>         <span class="at">ht                 =</span> <span class="st">&quot;ht&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>         <span class="at">bmi                =</span> <span class="st">&quot;bmi&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>         <span class="at">adjust.integer.age =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>         <span class="at">ref.data.path      =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><strong>Input expectations.</strong></p>
+<ul>
+<li><code>data</code> has at least age, sex, weight, height, and BMI
+columns. The default column names (<code>agem</code>, <code>wt</code>,
+<code>ht</code>, <code>bmi</code>) match <code>longwide()</code> +
+<code>simple_bmi()</code> output; remap via the arguments if
+different.</li>
+<li><strong><code>age</code> must be in months</strong>, using the most
+precise value available (years × 12, or days ÷ 30.4375). Only ages
+24–240 months are evaluated; others are dropped from the computation
+(but see merge-back below).</li>
+<li><strong><code>sex</code></strong> should be text:
+<code>M</code>/<code>F</code>, which is what <code>longwide()</code>
+returns, or another text code that works the same as in
+<code>cleangrowth()</code> (for example <code>b</code>/<code>g</code> or
+<code>male</code>/<code>female</code>). Numeric sex is accepted only if
+the column has <strong>both 1s and 2s and no other values</strong>, read
+as <strong>1 = male, 2 = female</strong> — <em>different from
+<code>cleangrowth()</code>’s numerical 0/1</em>, for historical reasons.
+The 1/2 coding matches the CDC reference data, CDC software, and the
+<code>cdcanthro</code> package. Any other numeric value stops the run.
+The column must be named <code>sex</code>.</li>
+<li><code>wt</code> in kg, <code>ht</code> in cm.</li>
+<li><code>adjust.integer.age</code> — if all <code>age</code> values are
+integers, add 0.5 (placing integer ages at mid-month, as the CDC macro
+does). Disable by setting <code>FALSE</code>.</li>
+<li><code>ref.data.path</code> — directory holding the reference file.
+Empty default loads the packaged
+<code>inst/extdata/CDCref_d.csv.gz</code> via
+<code>system.file()</code>; override only when developing against a
+local copy.</li>
+</ul>
+<p><strong>Mechanics (high level).</strong></p>
+<ol style="list-style-type: decimal">
+<li>Checks that the named input columns (and <code>sex</code>) exist,
+and warns if <code>data</code> already has a column named like one of
+the output columns (for example, from an earlier run): the returned data
+has the newly calculated values in that column. Copies <code>data</code>
+(<code>dorig</code>) and reads the four named columns plus
+<code>sex</code> into a separate working table with a <code>seq_</code>
+row index; <code>data</code> itself is never modified and its column
+names are kept.</li>
+<li>Optionally bumps integer ages by 0.5 (in the working table only; the
+returned age column is as entered).</li>
+<li>Stops if <code>sex</code> has any numeric value unless the present
+values are exactly 1 and 2 (see Notes / pitfalls), then normalizes
+<code>sex</code> to <code>sexn</code> ∈ {1, 2} via first-character
+matching (logical values are not recognized).</li>
+<li>Restricts to ages 24–240 months with at least one of wt/ht
+present.</li>
+<li>Loads the CDC LMS reference (<code>CDCref_d.csv.gz</code>,
+<code>denom == &quot;age&quot;</code>), assembling per-month L/M/S parameters for
+weight, height, and BMI (including the age-240 row used for the
+adjusted-distance reference <code>mref</code>/<code>sref</code>).</li>
+<li>For ages not present in the reference grid, linearly interpolates
+the L/M/S values per sex (<code>approx()</code>).</li>
+<li>Computes LMS z-scores and modified z-scores for weight, height, and
+BMI via <code>z_score()</code> (see below).</li>
+<li>Derives percentiles (<code>pnorm</code>), the 95th and 97th BMI
+percentiles (<code>p95</code>, <code>p97</code>), <code>bmip95</code>
+(BMI as a percent of the 95th percentile), the obese / severe-obese
+flags, and the alternative distance/percent-distance metrics from PMID
+31439056.</li>
+<li><strong>Extended BMIz/percentile.</strong> Computes the half-normal
+scale parameter <code>sigma</code> (a sex-specific quadratic in age in
+years). For rows with LMS BMI percentile ≥ 95, replaces the percentile
+with <code>90 + 10 * pnorm((bmi - p95) / sigma)</code> and the z-score
+with <code>qnorm(ebp/100)</code>. Where the extended percentile is so
+close to 100 that <code>qnorm</code> returns infinity (only above
+99.99999999999999, e.g. an implausibly high BMI at a young age — likely
+data error), the extended z is capped at <strong>8.21</strong>.</li>
+<li>Renames internal columns to the public output names, selects the
+output set, and adds the new metrics to the copy <code>dorig</code>,
+matched by <code>seq_</code> so every original row and column is
+returned in the original order (rows outside the age range get
+<code>NA</code> metrics). The input columns keep the user’s names.
+Variable labels (descriptions such as “Age (months)”) are attached as
+each column’s <code>label</code> attribute (on the copy).</li>
+</ol>
+<p><strong>Key output columns.</strong>
+<code>bmiz</code>/<code>bmip</code> (LMS <em>or</em> extended, identical
+below the 95th percentile),
+<code>original_bmiz</code>/<code>original_bmip</code> (always LMS),
+<code>mod_bmiz</code>/<code>mod_waz</code>/<code>mod_haz</code>
+(modified z-scores),
+<code>waz</code>/<code>wp</code>/<code>haz</code>/<code>hp</code>
+(weight- and height-for-age LMS z/percentile),
+<code>p95</code>/<code>p97</code>/<code>bmip95</code>,
+<code>sigma</code>, and the <code>obese</code>/<code>sev_obese</code>
+flags (<code>sev_obese</code> = BMI ≥ 120% of the 95th percentile). See
+<code>?ext_bmiz</code> for the full column set.</p>
+<p><strong>Notes / pitfalls.</strong></p>
+<ul>
+<li>Numerical sex coding (1/2) differs from <code>cleangrowth()</code>
+(0/1), so <code>ext_bmiz()</code> stops on numeric sex unless the column
+has both 1s and 2s and no other values. This includes a column of only
+1s, which could be all-male 1/2 data or all-female 0/1 data, and a
+column of only 2s. Numeric text and factor values are treated the same
+way. Single-sex data should be coded <code>M</code> or <code>F</code>.
+If 0 or another number means unknown, set it to <code>NA</code>. A
+warning gives the count of rows aged 24–240 months with a missing or
+unrecognized sex.</li>
+<li>Age units are months, not days or years.</li>
+<li>Rows outside 24–240 months are excluded from the metrics but still
+returned (with <code>NA</code> metrics) because the result is merged
+back onto the original rows.</li>
+<li>Age 730 days converts to 23.98 months (730 / 30.4375), which is
+below 24 months, so a row at agedays 730 gets <code>NA</code> metrics
+even though a child at that age may be exactly 2 years old; metrics
+begin at day 731. This matches the <code>cdcanthro</code> package. A
+warning gives the number of rows at about 729–730 days.</li>
+<li>The <code>qnorm</code>-infinity cap at 8.21 is intentional and
+matches the CDC macro’s handling.</li>
+<li>Dependencies: <code>data.table</code>, <code>R.utils</code> (except
+<code>extract</code>), and <code>stats::approx/pnorm/qnorm</code>, all
+from Imports; no optional packages are needed.</li>
+</ul>
+<div id="internal-helpers-cdc.r-not-exported" class="section level3">
+<h3>Internal helpers (cdc.R, not exported)</h3>
+<p><strong><code>z_score(var, l, m, s)</code></strong> — Given a
+measurement and its LMS parameters, returns a two-element list: the
+standard LMS z-score <code>(((var/m)^l) - 1) / (l*s)</code> and a
+<strong>modified</strong> z-score. The modified z-score expresses the
+value as a multiple of half the distance from the median to the ±2 SD
+points (<code>sdm2</code> below the median, <code>sdp2</code> above),
+which keeps extreme values on a more interpretable scale than the raw
+LMS z. Used for all three parameters (weight, height, BMI).</p>
+<p><strong><code>set_cols_first(DT, cols, intersection = TRUE)</code></strong>
+— Reorders a <code>data.table</code> so <code>cols</code> come first
+(via <code>setcolorder</code>). With <code>intersection = TRUE</code>
+(default) only columns actually present are moved, so it is safe to pass
+a superset. Used to restore the original column order on the merged-back
+result. (Adapted from the <code>hutils</code> package.)</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

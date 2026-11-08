@@ -25,16 +25,16 @@ recode_sex(
 
 \item{targetcol}{desired name of recoded sex descriptor column. Defaults to "sex_recoded"}
 
-\item{targetm}{desired name of recoded sex variable indicating "male" sex in output data. Defaults to 1}
+\item{targetm}{value to use for "male" sex in \code{targetcol}. Defaults to 1}
 
-\item{targetf}{desired name of recoded sex variable indicating "female" sex in output data. Defaults to 2}
+\item{targetf}{value to use for "female" sex in \code{targetcol}. Defaults to 2}
 }
 \value{
 Returns a data table with recoded sex variables.
 }
 \description{
 \code{recode_sex} recodes a binary sex variable for a given source column in a data frame or data table.
-Useful in transforming output from growthcleanr::cleangrowth() into a format suitable for growthcleanr::ext_bmiz().
+Only exact matches of \code{sourcem}/\code{sourcef} are recoded; any other value (e.g. "M"/"F") becomes NA in \code{targetcol} without a warning. \code{ext_bmiz()} reads only the column named \code{sex}, so to prepare data for it use \code{targetcol = "sex"} (with \code{targetm = "M"}, \code{targetf = "F"} if the data might have only one sex, since \code{ext_bmiz()} accepts numeric sex only when both 1 and 2 are present). Not needed between \code{cleangrowth()} and \code{ext_bmiz()}: \code{longwide()} already outputs sex as M or F.
 }
 \examples{
 # Run on given data

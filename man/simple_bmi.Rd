@@ -10,9 +10,9 @@ simple_bmi(wide_df, wtcol = "wt", htcol = "ht")
 \item{wide_df}{A data frame or data table containing heights and weights in
 wide format, e.g., after transformation with longwide()}
 
-\item{wtcol}{name of observation height value column, default 'wt'}
+\item{wtcol}{name of the weight value column (kg), default 'wt'}
 
-\item{htcol}{name of subject weight value column, default 'ht'}
+\item{htcol}{name of the height value column (cm), default 'ht'}
 }
 \value{
 Returns a data table with the added column "bmi"
@@ -27,14 +27,10 @@ output from longwide().
 # Run on a small subset of given data
 df <- as.data.frame(syngrowth)
 df <- df[df$subjid \%in\% unique(df[, "subjid"])[1:2], ]
-df <- cbind(df,
-            "gcr_result" = cleangrowth(df$subjid,
-                                       df$param,
-                                       df$agedays,
-                                       df$sex,
-                                       df$measurement))
+# cleangrowth() returns the data with an 'exclude' column
+clean_df <- cleangrowth(df)
 # Convert to wide format
-wide_df <- longwide(df)
+wide_df <- longwide(clean_df)
 wide_df_with_bmi <- simple_bmi(wide_df)
 
 # Specifying different column names; note that quotes are used

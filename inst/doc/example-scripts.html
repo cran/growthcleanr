@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2026-11-08" />
+
+<title>Example scripts</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Example scripts</h1>
+<h4 class="date">2026-11-08</h4>
+
+
+
+<p>These are complete scripts you can copy, paste, and run. Each box
+below is one scenario – click it to open the script, copy it, and change
+the parts marked for your own data.</p>
+<p>New to growthcleanr? See <code>vignette(&quot;new-start-here&quot;)</code>
+first for what it does and the data it expects.</p>
+<p><strong>How to use these scripts</strong></p>
+<ul>
+<li>Every setting is already filled in with growthcleanr’s default
+value, except where noted, so a script runs as written on standard
+data.</li>
+<li>To change a setting, edit the value on that line.</li>
+<li>If a whole box or a line does not apply to you, just delete it.
+growthcleanr uses its default whenever a setting is absent.</li>
+<li>These scripts use features added in growthcleanr version 3. Install
+the current version with
+<code>install.packages(&quot;growthcleanr&quot;)</code>.</li>
+</ul>
+<p><strong>Prefer not to write R code?</strong> We recommend using the
+Shiny app, but growthcleanr includes a ready-made script,
+<code>gc_template.R</code>, that reads a CSV, cleans it, and writes a
+results CSV. You edit two file names and run it from a command line;
+instructions are at the top of the file. To find it, run
+<code>system.file(&quot;scripts&quot;, &quot;gc_template.R&quot;, package = &quot;growthcleanr&quot;)</code>
+in R, or see <code>vignette(&quot;command-line&quot;)</code> for the command-line
+driver.</p>
+<p><strong>Check your setup before you clean.</strong> The settings most
+likely to be wrong are your <strong>sex coding</strong> and your
+<strong>measurement-type labels</strong>. Checking takes one line – see
+<em>Check your setup first</em>, just below.</p>
+<p><strong>Working with a lot of data?</strong> Speed matters, and
+growthcleanr has two options that help a great deal on large datasets:
+running on several CPU cores at once (<code>parallel</code>), and
+checkpointing, which cleans large datasets in pieces so the run stays
+fast and does not run out of memory. Checkpointing is on automatically;
+turn on <code>parallel</code> before a big run, and name a
+<code>checkpoint_dir</code> if you want to be able to resume – see the
+<em>Large datasets</em> box below and
+<code>vignette(&quot;large-datasets&quot;)</code> for full guidance.</p>
+<div id="before-you-start-the-standard-input" class="section level1">
+<h1>Before you start: the standard input</h1>
+<p>The scripts on this page use <strong>long format</strong>: one row
+per measurement, with these columns.</p>
+<ul>
+<li><code>subjid</code> – subject identifier (one person)</li>
+<li><code>param</code> – which measurement: <code>WEIGHTKG</code>,
+<code>HEIGHTCM</code>, or <code>HEADCM</code> (imperial
+<code>WEIGHTLBS</code>, <code>HEIGHTIN</code>, <code>HEADIN</code>, and
+recumbent <code>LENGTHCM</code>/<code>LENGTHIN</code> are also
+accepted)</li>
+<li><code>agedays</code> – age in days at the measurement (or supply
+dates instead; see the dates box below)</li>
+<li><code>sex</code> – <code>0</code> for male, <code>1</code> for
+female by default</li>
+<li><code>measurement</code> – the recorded value, in kg or cm (or
+imperial, per <code>param</code>)</li>
+<li><code>id</code> – optional, one identifier per <strong>row</strong>
+(not per person); growthcleanr creates one for you if you have none</li>
+</ul>
+<p>If your columns are named differently, your sex is coded differently,
+or your measurement labels differ, the boxes below show how to tell
+growthcleanr – you do not have to rename anything in your data
+first.</p>
+<p>growthcleanr also reads <strong>semi-wide</strong> (one row per
+visit) and <strong>wide</strong> (one row per subject) layouts; see the
+<em>Semi-wide data</em> and <em>Wide data</em> boxes below, where the
+column-name, sex-coding, and date options apply too.</p>
+</div>
+<div id="check-your-setup-first" class="section level1">
+<h1>Check your setup first</h1>
+<p>Before cleaning your whole dataset, confirm that growthcleanr is
+reading it the way you intend – especially your <strong>sex
+coding</strong> and your <strong>measurement-type labels</strong>, the
+two settings most likely to be wrong.</p>
+<p>You do not need a separate script for this. Take any script below,
+change <code>cleangrowth</code> to <code>gc_runtrial</code>, and run it:
+growthcleanr cleans a small sample of your patients (100 by default)
+using the exact settings in that script and prints a short report –
+<strong>without saving anything</strong>. When the report looks right,
+change <code>gc_runtrial</code> back to <code>cleangrowth</code> and run
+for real.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co"># The same call you plan to run, with cleangrowth changed to gc_runtrial.</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co"># Add your real settings here (column names, sex_coding, labels, dates),</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># exactly as in the boxes below.</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">gc_runtrial</span>(df)</span></code></pre></div>
+<p><strong>What the report shows</strong></p>
+<ul>
+<li><strong>Sample</strong> – how many patients were sampled (add
+<code>seed = 1</code> for the same sample each time).</li>
+<li><strong>How your input was read</strong> – the input format, which
+columns were used, and the age source.</li>
+<li><strong>Sex</strong> – which of your codes were read as male and
+female, and any values it did not recognize.</li>
+<li><strong>Parameters</strong> – which of your labels were read as
+weight, height, and head circumference, and any it did not
+recognize.</li>
+<li><strong>Flagged while reading</strong> – anything growthcleanr
+warned about as it read your data.</li>
+<li><strong>Cleaning result</strong> – a count of each exclusion code in
+the sample.</li>
+</ul>
+<p>If a setting would make growthcleanr stop (for example a sex coding
+it will not guess), the trial reports that as the headline finding and
+still shows the sex and parameter mapping, so you can see what to
+fix.</p>
+</div>
+<div id="scripts" class="section level1">
+<h1>Scripts</h1>
+<details>
+<summary>
+<strong>The simplest run (all defaults)</strong>
+</summary>
+<p>Use this when your data already uses the standard column names and
+codings described above.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;growthcleanr&quot;</span>)   <span class="co"># first time only</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)  <span class="co"># your file</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(df)   <span class="co"># to check first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>The full template (all common options in one place)</strong>
+</summary>
+<p>Every common setting, shown at its default except where noted. Edit
+the values you need and delete the lines or sections you do not.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># ============================================================================</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#  growthcleanr -- cleaning template (LONG data format)</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#  HOW TO USE THIS SCRIPT</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#  - Every setting below is filled in with growthcleanr&#39;s DEFAULT, except</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#    where noted, so the script runs as-is on standard data.</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#  - To change a setting, edit the value on that line.</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#  - If a whole SECTION does not apply to you, DELETE those lines. Deleting is</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#    always safe: growthcleanr falls back to its default when a setting is gone.</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co"># ============================================================================</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;growthcleanr&quot;</span>)             <span class="co"># first time only</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)             <span class="co"># your file name</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  df,</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>  <span class="co">#  PERFORMANCE  -- worth setting before a large run (see the</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>  <span class="co">#  &quot;Large datasets&quot; article for full guidance)</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>  <span class="co"># PARALLEL: use several CPU cores at once. FALSE (default) uses one core.</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>  <span class="co"># For more than a few thousand subjects, set this to TRUE.</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="cn">FALSE</span>,          <span class="co"># change to TRUE to speed up large datasets</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>  <span class="at">cores    =</span> <span class="cn">NULL</span>,           <span class="co"># NULL auto-detects (up to 8); or set a number like 4</span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>  <span class="co"># CHECKPOINTING: clean large data in pieces so the run stays fast and within</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>  <span class="co"># memory; name a folder to also make the run resumable if it is interrupted.</span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>  <span class="co"># Leave NULL: checkpointing is automatic for more than 5,000 subjects</span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>  <span class="co"># (temporary files, deleted after). Name a folder only to keep the files</span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>  <span class="co"># for resuming.</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>  <span class="at">checkpoint_dir    =</span> <span class="cn">NULL</span>,  <span class="co"># e.g. &quot;gc_checkpoints&quot; </span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>                             <span class="co"># if the folder does not exist, growthcleanr will make it</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a>                             <span class="co"># existing checkpoint files in this folder are deleted at the start, unless checkpoint_resume = TRUE</span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>  <span class="at">checkpoint_resume =</span> <span class="cn">FALSE</span>, <span class="co"># set TRUE to resume that folder after a crash</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>  <span class="co">#  COLUMN NAMES  -- left = what growthcleanr expects, right = YOUR column name</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>  <span class="at">subjid      =</span> <span class="st">&quot;subjid&quot;</span>,       <span class="co"># subject id (one person)</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a>  <span class="at">id          =</span> <span class="st">&quot;id&quot;</span>,           <span class="co"># optional per-ROW id; delete this line if you have none</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a>  <span class="at">param       =</span> <span class="st">&quot;param&quot;</span>,        <span class="co"># which measurement (weight/height/head circ.)</span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a>  <span class="at">agedays     =</span> <span class="st">&quot;agedays&quot;</span>,      <span class="co"># age in days (delete this line if you use DATES below)</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a>  <span class="at">sex         =</span> <span class="st">&quot;sex&quot;</span>,</span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a>  <span class="at">measurement =</span> <span class="st">&quot;measurement&quot;</span>,</span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a>  <span class="co">#  SEX CODING</span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a>  <span class="co">#  Default: male = 0,&quot;m&quot;,&quot;b&quot;,&quot;male&quot;,&quot;boy&quot;; female = 1,&quot;f&quot;,&quot;g&quot;,&quot;female&quot;,&quot;girl&quot;</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a>  <span class="co">#  IMPORTANT: growthcleanr reads 1 as FEMALE. If your data uses 1 = male,</span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a>  <span class="co">#  2 = female, you MUST set this. Whatever you put here REPLACES the defaults,</span></span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a>  <span class="co">#  so list every code you use. Delete this line to keep the defaults.</span></span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a>  <span class="at">sex_coding =</span> <span class="fu">list</span>(<span class="at">male   =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="st">&quot;m&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;male&quot;</span>, <span class="st">&quot;boy&quot;</span>),</span>
+<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a>                    <span class="at">female =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="st">&quot;f&quot;</span>, <span class="st">&quot;g&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;girl&quot;</span>)),</span>
+<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a>  <span class="co">#  MEASUREMENT-TYPE (param) CODING</span></span>
+<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a>  <span class="co">#  growthcleanr recognizes only these spelled-out labels:</span></span>
+<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a>  <span class="co">#    WEIGHTKG, WEIGHTLBS, HEIGHTCM, HEIGHTIN, LENGTHCM, LENGTHIN, HEADCM, HEADIN</span></span>
+<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a>  <span class="co">#  If your data uses other labels (e.g. WT/HT/HC), map them here. Mapping to an</span></span>
+<span id="cb3-66"><a href="#cb3-66" tabindex="-1"></a>  <span class="co">#  imperial name (WEIGHTLBS/HEIGHTIN/...) also tells growthcleanr the units.</span></span>
+<span id="cb3-67"><a href="#cb3-67" tabindex="-1"></a>  <span class="co">#  EXAMPLE (default is NULL): map your own labels.</span></span>
+<span id="cb3-68"><a href="#cb3-68" tabindex="-1"></a>  <span class="co">#  Delete this line if your labels already match the names above.</span></span>
+<span id="cb3-69"><a href="#cb3-69" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-70"><a href="#cb3-70" tabindex="-1"></a>  <span class="at">param_coding =</span> <span class="fu">list</span>(<span class="at">WEIGHTKG =</span> <span class="fu">c</span>(<span class="st">&quot;WT&quot;</span>, <span class="st">&quot;Weight&quot;</span>),</span>
+<span id="cb3-71"><a href="#cb3-71" tabindex="-1"></a>                      <span class="at">HEIGHTCM =</span> <span class="fu">c</span>(<span class="st">&quot;HT&quot;</span>, <span class="st">&quot;Height&quot;</span>),</span>
+<span id="cb3-72"><a href="#cb3-72" tabindex="-1"></a>                      <span class="at">HEADCM   =</span> <span class="fu">c</span>(<span class="st">&quot;HC&quot;</span>, <span class="st">&quot;HeadCirc&quot;</span>)),</span>
+<span id="cb3-73"><a href="#cb3-73" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-75"><a href="#cb3-75" tabindex="-1"></a>  <span class="co">#  DATES INSTEAD OF agedays  (optional)</span></span>
+<span id="cb3-76"><a href="#cb3-76" tabindex="-1"></a>  <span class="co">#  Most people supply age in days and can DELETE this whole section.</span></span>
+<span id="cb3-77"><a href="#cb3-77" tabindex="-1"></a>  <span class="co">#  To use dates instead: fill in your two date columns below AND delete the</span></span>
+<span id="cb3-78"><a href="#cb3-78" tabindex="-1"></a>  <span class="co">#  `agedays` line up in COLUMN NAMES. growthcleanr computes age from the dates.</span></span>
+<span id="cb3-79"><a href="#cb3-79" tabindex="-1"></a>  <span class="co">#  Text dates like &quot;2013-03-04&quot; or &quot;15 Mar 2013&quot; work with no extra setting.</span></span>
+<span id="cb3-80"><a href="#cb3-80" tabindex="-1"></a>  <span class="co">#  For number dates like &quot;3/4/2013&quot;, set date_order to &quot;mdy&quot; or &quot;dmy&quot;.</span></span>
+<span id="cb3-81"><a href="#cb3-81" tabindex="-1"></a>  <span class="co"># ==========================================================================</span></span>
+<span id="cb3-82"><a href="#cb3-82" tabindex="-1"></a>  <span class="at">dob        =</span> <span class="cn">NULL</span>,   <span class="co"># e.g. &quot;birth_date&quot;</span></span>
+<span id="cb3-83"><a href="#cb3-83" tabindex="-1"></a>  <span class="at">visit_date =</span> <span class="cn">NULL</span>,   <span class="co"># e.g. &quot;measure_date&quot;</span></span>
+<span id="cb3-84"><a href="#cb3-84" tabindex="-1"></a>  <span class="at">date_order =</span> <span class="cn">NULL</span>,   <span class="co"># e.g. &quot;mdy&quot; (US) or &quot;dmy&quot; -- only for number dates</span></span>
+<span id="cb3-85"><a href="#cb3-85" tabindex="-1"></a></span>
+<span id="cb3-86"><a href="#cb3-86" tabindex="-1"></a>  <span class="at">quietly =</span> <span class="cn">FALSE</span>      <span class="co"># FALSE prints a progress + cleaning summary; TRUE stays silent</span></span>
+<span id="cb3-87"><a href="#cb3-87" tabindex="-1"></a>)</span>
+<span id="cb3-88"><a href="#cb3-88" tabindex="-1"></a></span>
+<span id="cb3-89"><a href="#cb3-89" tabindex="-1"></a><span class="co"># --- Save the cleaned results -----------------------------------------------</span></span>
+<span id="cb3-90"><a href="#cb3-90" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Rename your columns</strong>
+</summary>
+<p>Tell growthcleanr which of your columns is which. You do not have to
+rename anything in your data.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co"># Left = the name growthcleanr uses; right = YOUR column name.</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  df,</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="at">subjid      =</span> <span class="st">&quot;patid&quot;</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="at">id          =</span> <span class="st">&quot;row_id&quot;</span>,     <span class="co"># optional per-ROW id; delete if you have none</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="at">param       =</span> <span class="st">&quot;measure&quot;</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="at">agedays     =</span> <span class="st">&quot;age_days&quot;</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="at">sex         =</span> <span class="st">&quot;gender&quot;</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  <span class="at">measurement =</span> <span class="st">&quot;value&quot;</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>)</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Set your sex coding (including 1 = male, 2 = female)</strong>
+</summary>
+<p>growthcleanr reads <strong><code>0</code> as male and <code>1</code>
+as female</strong> by default. It will also accept M/F, B/G,
+male/female, boy/girl. If your data uses <code>1</code> = male,
+<code>2</code> = female, you must tell it – growthcleanr detects that
+pattern and refuses to run rather than silently misclassify everyone. It
+can’t detect the pattern if every value is <code>1</code> (for example,
+all boys), so it reads them as female and gives a prominent warning.
+Whatever you list here replaces the defaults, so include every code your
+data uses.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  df,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">sex_coding =</span> <span class="fu">list</span>(<span class="at">male =</span> <span class="dv">1</span>, <span class="at">female =</span> <span class="dv">2</span>)   <span class="co"># your codes; replaces the defaults</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Use your own measurement-type labels (WT / HT / HC)</strong>
+</summary>
+<p>growthcleanr recognizes only the spelled-out labels
+<code>WEIGHTKG</code>, <code>WEIGHTLBS</code>, <code>HEIGHTCM</code>,
+<code>HEIGHTIN</code>, <code>LENGTHCM</code>, <code>LENGTHIN</code>,
+<code>HEADCM</code>, <code>HEADIN</code> – there are deliberately no
+built-in abbreviations. Map your labels to them. Mapping a label to an
+imperial name (<code>WEIGHTLBS</code> / <code>HEIGHTIN</code> / …) also
+declares that its values are imperial.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  df,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">param_coding =</span> <span class="fu">list</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="at">WEIGHTKG =</span> <span class="fu">c</span>(<span class="st">&quot;WT&quot;</span>, <span class="st">&quot;Weight&quot;</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>    <span class="at">HEIGHTCM =</span> <span class="fu">c</span>(<span class="st">&quot;HT&quot;</span>, <span class="st">&quot;Height&quot;</span>),</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>    <span class="at">HEADCM   =</span> <span class="fu">c</span>(<span class="st">&quot;HC&quot;</span>, <span class="st">&quot;HeadCirc&quot;</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  )</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Imperial units (pounds and inches)</strong>
+</summary>
+<p>Metric units are recommended, but if you wish to clean measurements
+in pounds and inches, label them <code>WEIGHTLBS</code> and
+<code>HEIGHTIN</code> (or <code>LENGTHIN</code>, <code>HEADIN</code>).
+growthcleanr converts them internally to metric for cleaning; the
+<code>measurement</code> column in the output stays as you entered it.
+If your labels are something else (for example <code>wt_lb</code>), map
+them to the imperial names with <code>param_coding</code> – a label
+mapped to <code>WEIGHTKG</code> or <code>HEIGHTCM</code> is read as
+metric.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)   <span class="co"># param values WEIGHTLBS / HEIGHTIN</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  df</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="co"># If your labels differ, add (after &quot;df,&quot;):</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="co"># param_coding = list(WEIGHTLBS = &quot;wt_lb&quot;, HEIGHTIN = &quot;ht_in&quot;)</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+<p><strong>Semi-wide data in pounds and inches.</strong> Map each value
+column to its imperial name (see the <em>Semi-wide data</em> box
+below).</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)   <span class="co"># one row per visit; columns such as wt_lb, ht_in</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  df,</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="at">input_format  =</span> <span class="st">&quot;semi_wide&quot;</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="at">semiwide_cols =</span> <span class="fu">list</span>(<span class="at">WEIGHTLBS =</span> <span class="st">&quot;wt_lb&quot;</span>, <span class="at">HEIGHTIN =</span> <span class="st">&quot;ht_in&quot;</span>)   <span class="co"># your column names</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+<p><strong>Wide data in pounds and inches.</strong> Map each column-name
+prefix to its imperial name (see the <em>Wide data</em> box below).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)   <span class="co"># one row per subject; columns like wt_1, ht_1, wt_2, ...</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  df,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="at">input_format =</span> <span class="st">&quot;wide&quot;</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="at">wide_cols    =</span> <span class="fu">list</span>(<span class="at">WEIGHTLBS =</span> <span class="st">&quot;wt&quot;</span>, <span class="at">HEIGHTIN =</span> <span class="st">&quot;ht&quot;</span>)   <span class="co"># your prefixes (the part before _N)</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Use dates instead of age in days</strong>
+</summary>
+<p>Supply a birth date and a visit date and growthcleanr computes each
+age for you. Do not also supply an <code>agedays</code> column. Text
+dates like <code>&quot;2013-03-04&quot;</code> or <code>&quot;15 Mar 2013&quot;</code> need
+no extra setting; for number dates like <code>&quot;3/4/2013&quot;</code>, set
+<code>date_order</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  df,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="at">subjid      =</span> <span class="st">&quot;patid&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="at">param       =</span> <span class="st">&quot;param&quot;</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="at">sex         =</span> <span class="st">&quot;sex&quot;</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="at">measurement =</span> <span class="st">&quot;measurement&quot;</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  <span class="at">dob         =</span> <span class="st">&quot;birth_date&quot;</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  <span class="at">visit_date  =</span> <span class="st">&quot;measure_date&quot;</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="at">date_order  =</span> <span class="st">&quot;mdy&quot;</span>          <span class="co"># delete this line if your dates are text (e.g. yyyy-mm-dd)</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>)</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Semi-wide data (one row per visit)</strong>
+</summary>
+<p>In semi-wide format, each row is one visit: a subject id, a sex, an
+age (or dates), and one column per measurement type – for example a
+weight column and a height column side by side. Set
+<code>input_format = &quot;semi_wide&quot;</code>. If your value columns are
+literally named <code>WEIGHTKG</code>, <code>HEIGHTCM</code>,
+<code>HEADCM</code>, growthcleanr finds them automatically; otherwise
+map them with <code>semiwide_cols</code>. The results come back in the
+same shape, with growthcleanr’s <code>exclude</code> result added next
+to each measurement column. The column-name, sex-coding, and date
+options from the boxes above apply here too.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)   <span class="co"># one row per visit</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  df,</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="at">input_format =</span> <span class="st">&quot;semi_wide&quot;</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  <span class="co"># Map each measurement type to the column that holds its values.</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  <span class="co"># Delete this line if your columns are already named WEIGHTKG / HEIGHTCM / HEADCM.</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="at">semiwide_cols =</span> <span class="fu">list</span>(<span class="at">WEIGHTKG =</span> <span class="st">&quot;wt_kg&quot;</span>, <span class="at">HEIGHTCM =</span> <span class="st">&quot;ht_cm&quot;</span>, <span class="at">HEADCM =</span> <span class="st">&quot;head_cm&quot;</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>)</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Wide data (one row per subject)</strong>
+</summary>
+<p>In wide format, each row is one subject, with a subject id, a sex,
+and repeated visit “blocks” numbered with a <code>_N</code> suffix: an
+age column and one column per measurement type for each visit – for
+example <code>agedays_1</code>, <code>wt_1</code>, <code>ht_1</code>,
+then <code>agedays_2</code>, <code>wt_2</code>, <code>ht_2</code>, and
+so on. Set <code>input_format = &quot;wide&quot;</code>. You choose the
+column-name prefix for each measurement type and map it with
+<code>wide_cols</code>; growthcleanr discovers the visit blocks from the
+<code>_N</code> numbers. If your prefixes are literally
+<code>WEIGHTKG</code>, <code>HEIGHTCM</code>, <code>HEADCM</code> (and
+<code>agedays</code>), growthcleanr finds them automatically. Results
+come back in the same shape, with growthcleanr’s <code>exclude</code>
+result added next to each measurement column.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)   <span class="co"># one row per subject; columns like wt_1, ht_1, wt_2, ...</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  df,</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="at">input_format =</span> <span class="st">&quot;wide&quot;</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="co"># Give the column-name PREFIX for each measurement type (the part before _N).</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="co"># Delete this line if your prefixes are already WEIGHTKG / HEIGHTCM / HEADCM.</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="at">wide_cols =</span> <span class="fu">list</span>(<span class="at">WEIGHTKG =</span> <span class="st">&quot;wt&quot;</span>, <span class="at">HEIGHTCM =</span> <span class="st">&quot;ht&quot;</span>, <span class="at">HEADCM =</span> <span class="st">&quot;hc&quot;</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>)</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+<p>If some subjects have more than 25 visits in wide format,
+growthcleanr still reads every visit block but gives a warning; add
+<code>max_blocks = &lt;a larger number&gt;</code> to avoid it.</p>
+</details>
+<details>
+<summary>
+<strong>See more detail about why values were excluded</strong>
+</summary>
+<p>By default growthcleanr returns a short <code>exclude</code> code for
+each value. Add <code>exclude_detail = TRUE</code> for a second,
+finer-grained <code>exclude_detailed</code> column that names the
+specific reason. For every optional diagnostic column at once, use
+<code>full_detail = TRUE</code> instead. See
+<code>vignette(&quot;output&quot;)</code> and
+<code>vignette(&quot;exclusion-codes&quot;)</code> for what the columns and codes
+mean.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  df,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="at">exclude_detail =</span> <span class="cn">TRUE</span>   <span class="co"># adds a finer-grained &quot;exclude_detailed&quot; column</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Data that includes adults</strong>
+</summary>
+<p>growthcleanr cleans children and adults in the same run: by default,
+measurements at age 20 years and older are cleaned with the adult
+algorithm and younger measurements with the child algorithm. You do not
+have to split your data. Two settings you may want are where the
+child/adult boundary falls (<code>adult_cutpoint</code>, default 20, may
+be set between 18 and 20) and how strict the adult algorithm is
+(<code>adult_permissiveness</code>, default <code>&quot;looser&quot;</code> – in
+general, <code>looser</code>/<code>loosest</code> flag fewer values and
+<code>tighter</code>/<code>tightest</code> flag more).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  df,</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="at">adult_cutpoint       =</span> <span class="dv">20</span>,        <span class="co"># age in years when the adult algorithm takes over (18-20)</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="at">adult_permissiveness =</span> <span class="st">&quot;looser&quot;</span>   <span class="co"># loosest to tightest; in general, looser/loosest flag fewer values and tighter/tightest flag more</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>)</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+<p>To choose a level, see Section 1D of
+<code>vignette(&quot;configuration&quot;)</code>.</p>
+</details>
+<details>
+<summary>
+<strong>Large datasets: run in parallel and save progress</strong>
+</summary>
+<p>For many subjects, run on several CPU cores
+(<code>parallel = TRUE</code>). Checkpointing is on by default: for
+datasets with more than 5,000 subjects, growthcleanr cleans in
+checkpoints saved to a temporary folder and deletes them when the run
+finishes. Set <code>checkpoint_dir</code> to keep the checkpoint files
+so an interrupted run can resume, or <code>checkpoint = FALSE</code> to
+write nothing to disk. See <code>vignette(&quot;large-datasets&quot;)</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data.csv&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">cleangrowth</span>(   <span class="co"># to check your setup first, change &quot;cleangrowth&quot; to &quot;gc_runtrial&quot;</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>  df,</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="at">parallel       =</span> <span class="cn">TRUE</span>,             <span class="co"># use several CPU cores</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>  <span class="at">checkpoint_dir =</span> <span class="st">&quot;gc_checkpoints&quot;</span>  <span class="co"># save progress to this NEW folder (growthcleanr will make it)</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>)</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="fu">fwrite</span>(cleaned, <span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>Keep only included values (build the analysis set)</strong>
+</summary>
+<p>growthcleanr does not remove any values; it adds an
+<code>exclude</code> column with a recommendation for each one. To build
+an analysis set of the values it recommends keeping, filter on that
+column. (<code>bin_exclude == &quot;Include&quot;</code> gives the same rows.)</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)   <span class="co"># output of cleangrowth()</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>analysis <span class="ot">&lt;-</span> cleaned[exclude <span class="sc">==</span> <span class="st">&quot;Include&quot;</span>]</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">fwrite</span>(analysis, <span class="st">&quot;my_growth_data_for_analysis.csv&quot;</span>)</span></code></pre></div>
+</details>
+<details>
+<summary>
+<strong>BMI after cleaning</strong>
+</summary>
+<p><code>longwide()</code> keeps the included values and puts each
+weight and height measured on the same day on one row;
+<code>simple_bmi()</code> adds BMI; <code>ext_bmiz()</code> adds BMI
+z-scores and percentiles (including extended BMI z-scores), which are
+computed for ages 2-19 years only. See
+<code>vignette(&quot;utilities&quot;)</code> for details.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">library</span>(growthcleanr)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>cleaned <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&quot;my_growth_data_cleaned.csv&quot;</span>)   <span class="co"># output of cleangrowth()</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>wide <span class="ot">&lt;-</span> <span class="fu">longwide</span>(cleaned)   <span class="co"># included values only; one row per subject and day with both weight and height</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>wide <span class="ot">&lt;-</span> <span class="fu">simple_bmi</span>(wide)    <span class="co"># adds bmi</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>bmiz <span class="ot">&lt;-</span> <span class="fu">ext_bmiz</span>(wide)      <span class="co"># adds bmiz, bmip, and related columns (ages 2-19 years)</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="fu">fwrite</span>(bmiz, <span class="st">&quot;my_growth_data_bmiz.csv&quot;</span>)</span></code></pre></div>
+<p>If you used column-name, <code>sex_coding</code>, or
+<code>param_coding</code> settings in <code>cleangrowth()</code>, give
+<code>longwide()</code> the same settings.</p>
+</details>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
